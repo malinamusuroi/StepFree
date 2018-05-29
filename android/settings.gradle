@@ -1,0 +1,3 @@
+rootProject.name = 'WebApps_Front_End'
+
+include ':app'
