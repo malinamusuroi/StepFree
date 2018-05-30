@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "ios": "react-native-scripts ios",
+    "android": "react-native-scripts android"
   },
   "dependencies": {
+    "expo": "^27.0.2",
     "react": "16.3.1",
-    "react-native": "0.55.4"
+    "react-native": "^0.55.4",
+    "react-native-scripts": "^1.14.0"
   },
   "devDependencies": {
     "babel-jest": "23.0.1",
