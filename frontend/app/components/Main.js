@@ -37,14 +37,12 @@ render() {
       placeholder="Enter Destination:"
       onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-
-
     <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
       <Text style = {styles.findButtonText}>FIND</Text>
     </TouchableOpacity>
 
     <ScrollView>
-      <Text style={styles.text}> {this.state.result} </Text>
+        <Text style={styles.text}> {this.state.result} </Text>
     </ScrollView>
 
     <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
@@ -54,16 +52,21 @@ render() {
   </View>
 )};
 
-// asks for the content
   search() {
     var origin1 = encodeURIComponent(this.state.FROMtext);
      var destination1 = encodeURIComponent(this.state.TOtext);
-    
-    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)
+    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+    //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
     .then((response) => response.json())
     .then((responseJson) => {
+      var leg = JSON.stringify(responseJson.legs).slice(1,-1).split("\",")
+      var leg_str = ''
+      for (i=0; i<leg.length; i++){
+        var count = i+1
+        leg_str+=count + " : " + leg[i].slice(1)+"\n"
+      }
       this.setState({
-        result: JSON.stringify(responseJson)
+        result: "Estimated Duration: " + JSON.stringify(responseJson.duration).slice(1,-1) + "\nSteps:\n" + leg_str.slice(0,-2)
       });
   })
     .catch(function(error) {
@@ -76,7 +79,6 @@ render() {
   }
   
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -128,9 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    //alignItems: 'center',
     alignSelf: 'flex-end',
-    //top: -20,
     end: 10,
 
   },
@@ -162,5 +162,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    color: 'black',
+    justifyContent: 'center',
   },
 });
