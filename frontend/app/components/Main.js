@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -6,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Button,
   View
  } from 'react-native';
 
@@ -15,8 +15,9 @@ export default class Main extends Component {
     super(props);
     this.state = {
       FROMtext: '',
-      TOtext: ''
-   };
+      TOtext: '',
+      result: ''
+    };
   }
 
 render() {
@@ -36,55 +37,44 @@ render() {
       placeholder="Enter Destination:"
       onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-    <TouchableOpacity onPress={this.switch.bind(this)} style = {styles.switchButton}>
-      <Text style = {styles.switchButtonText}>↑↓</Text>
-    </TouchableOpacity>
 
-    <TouchableOpacity onPress={this.search.bind(this)} style = {styles.findButton}>
+
+    <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
       <Text style = {styles.findButtonText}>FIND</Text>
     </TouchableOpacity>
 
-    <ScrollView style={styles.output}>
-      <Text style={styles.text}> HELLO </Text>
-      <Text style={styles.text}> HELLO </Text>
-   </ScrollView>
+    <ScrollView>
+      <Text style={styles.text}> {this.state.result} </Text>
+    </ScrollView>
 
-   <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
+    <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
       <Text style = {styles.refreshButtonText}>Clear</Text>
     </TouchableOpacity>
 
   </View>
 )};
 
+// asks for the content
   search() {
-    if(this.state.TOtext&&this.state.FROMtext) {
-     //alert(this.state.FROMtext + "\n"+ this.state.TOtext)
-     alert("here")
-    //  fetch('URL', {body : JSON.stringify({
-    //   origin: this.state.FROMtext,
-    //   destination: this.state.TOtext
-    //   })
-    // })
-   } else {
-    alert("Enter start and end destinations");
-   }
-  }
-
-  switch() {
-    if(this.state.TOtext&&this.state.FROMtext){
-      var temp = this.state.FROMtext
-      this.setState({FROMtext: this.state.TOtext}, () => console.log(this.state.FROMtext))
-      this.setState({TOtext: temp},() => console.log(this.state.TOtext))
-    }else {
-      alert("Enter start and end destinations");
-    }
-  }
+    var origin1 = encodeURIComponent(this.state.FROMtext);
+     var destination1 = encodeURIComponent(this.state.TOtext);
+    
+    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        result: JSON.stringify(responseJson)
+      });
+  })
+    .catch(function(error) {
+    console.error('There has been a problem with your fetch operation: ' + error.message);
+    });
+  } 
 
   refresh() {
-    this.setState({FROMtext: ''},() => console.log(this.state.FROMtext))
-    this.setState({TOtext: ''},() => console.log(this.state.TOtext))
- }
-
+    alert(this.state.FROMtext + "\n"+ this.state.TOtext);
+  }
+  
 }
 
 
@@ -105,6 +95,7 @@ const styles = StyleSheet.create({
   },
   FROMtext: {
     top:10,
+    //paddingTop: 50,
     fontSize: 20,
     color: 'black',
     height: 60,
@@ -139,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     //alignItems: 'center',
     alignSelf: 'flex-end',
-    top: -40,
+    //top: -20,
     end: 10,
 
   },
@@ -164,12 +155,12 @@ const styles = StyleSheet.create({
     end: 10,
     bottom: 10,
     marginTop: -20
- },
+  },
   refreshButtonText: {
     color: '#fff',
     fontSize: 24
   },
   text: {
-    fontSize: 100,
-  }
+    fontSize: 20,
+  },
 });
