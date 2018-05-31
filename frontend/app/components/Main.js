@@ -16,8 +16,7 @@ export default class Main extends Component {
     this.state = {
       FROMtext: '',
       TOtext: ''
-    }
-    //this.onHandleChange = this.onHandleChange.bind(this);
+   };
   }
 
 render() {
@@ -29,7 +28,7 @@ render() {
       <Text style={styles.headerText}>APP NAME TBD</Text>
     </View>
 
-    <TextInput style={styles.FROMtext}
+   <TextInput style={styles.FROMtext}
       placeholder="Enter Start:"
       onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
 
@@ -48,17 +47,9 @@ render() {
     <ScrollView style={styles.output}>
       <Text style={styles.text}> HELLO </Text>
       <Text style={styles.text}> HELLO </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-    </ScrollView>
+   </ScrollView>
 
-    <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton} onChange={this.onHandleChange}>
+   <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
       <Text style = {styles.refreshButtonText}>Clear</Text>
     </TouchableOpacity>
 
@@ -92,7 +83,7 @@ render() {
   refresh() {
     this.setState({FROMtext: ''},() => console.log(this.state.FROMtext))
     this.setState({TOtext: ''},() => console.log(this.state.TOtext))
-  }
+ }
 
 }
 
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     height: 60,
-  },
+ },
   TOtext: {
     fontSize: 20,
     color: 'black',
@@ -173,7 +164,7 @@ const styles = StyleSheet.create({
     end: 10,
     bottom: 10,
     marginTop: -20
-  },
+ },
   refreshButtonText: {
     color: '#fff',
     fontSize: 24
