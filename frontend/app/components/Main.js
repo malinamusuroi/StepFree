@@ -37,8 +37,6 @@ render() {
       placeholder="Enter Destination:"
       onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-
-
     <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
       <Text style = {styles.findButtonText}>FIND</Text>
     </TouchableOpacity>
@@ -54,12 +52,11 @@ render() {
   </View>
 )};
 
-// asks for the content
   search() {
     var origin1 = encodeURIComponent(this.state.FROMtext);
      var destination1 = encodeURIComponent(this.state.TOtext);
-    
-    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)
+    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+    //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({
@@ -76,7 +73,6 @@ render() {
   }
   
 }
-
 
 const styles = StyleSheet.create({
   container: {

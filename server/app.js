@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 
 app.get('/getDirections', function (req, res) {
-    console.log("received get directions");
 
     getDirections(req.query.origin, req.query.destination, function (json) {
         res.json(json)
@@ -20,16 +19,19 @@ function getDirections(origin, destination, callback) {
         mode: 'transit',
     }, function (err, response) {
         if (!err) {
-            const json = {
-                origin: origin,
-                destination: destination,
-                legs: response.json.routes[0].legs
+            const j = {
+                duration: response.json.routes[0].legs[0].duration.text,
+                legs: getInstruction(response.json.routes[0].legs)
             };
-            callback(json)
+            callback(j)
         } else {
             console.error(err);
         }
     });
+}
+
+function getInstruction(legs) {
+    return legs[0].steps.map((step) => step.html_instructions);
 }
 
 app.listen(process.env.PORT || 3000);
