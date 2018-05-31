@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -6,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Button,
   View
  } from 'react-native';
 
@@ -15,7 +15,8 @@ export default class Main extends Component {
     super(props);
     this.state = {
       FROMtext: '',
-      TOtext: ''
+      TOtext: '',
+      result: ''
     };
   }
 
@@ -31,21 +32,12 @@ render() {
       placeholder="Enter Destination:"
       onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-    <TouchableOpacity onPress={this.search.bind(this)} style = {styles.findButton}>
+    <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
       <Text style = {styles.findButtonText}>FIND</Text>
     </TouchableOpacity>
 
     <ScrollView>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
-      <Text style={styles.text}> CHECK </Text>
+      <Text style={styles.text}> {this.state.result} </Text>
     </ScrollView>
 
     <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
@@ -55,14 +47,26 @@ render() {
   </View>
 )};
 
+// asks for the content
   search() {
-     alert(this.state.FROMtext + "\n"+ this.state.TOtext);
-  }
+     var origin1 = encodeURIComponent(this.state.FROMtext);
+     var destination1 = encodeURIComponent(this.state.TOtext);
+    
+    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        result: JSON.stringify(responseJson)
+      });
+  })
+    .catch(function(error) {
+    console.error('There has been a problem with your fetch operation: ' + error.message);
+    });
 
+} 
   refresh() {
     alert(this.state.FROMtext + "\n"+ this.state.TOtext);
   }
-
 }
 
 
@@ -71,6 +75,7 @@ const styles = StyleSheet.create({
       flex: 1,
   },
   FROMtext: {
+    paddingTop: 50,
     fontSize: 20,
     color: 'black',
 
@@ -114,6 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   text: {
-    fontSize: 100,
+    fontSize: 20,
   }
 });
