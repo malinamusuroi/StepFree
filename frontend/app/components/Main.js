@@ -26,28 +26,28 @@ render() {
   <View style={styles.container}>
 
     <View style={styles.header}>
-      <Text style={styles.headerText}>APP NAME TBD</Text>
+      <Text style={styles.headerText}>EMPOWER </Text>
+    </View>
+    <View style = {styles.header}>
+    <Text style={styles.headerText2}>MOVEMENT</Text>
     </View>
 
    <TextInput style={styles.FROMtext}
-      placeholder="Enter Start:"
+      placeholder="Enter Start"
       onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
 
     <TextInput style={styles.TOtext}
-      placeholder="Enter Destination:"
+      placeholder="Enter Destination"
       onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
     <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
-      <Text style = {styles.findButtonText}>FIND</Text>
+      <Text style = {styles.findButtonText}>FIND ROUTE♿︎
+      </Text>
     </TouchableOpacity>
 
     <ScrollView>
         <Text style={styles.text}> {this.state.result} </Text>
     </ScrollView>
-
-    <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
-      <Text style = {styles.refreshButtonText}>Clear</Text>
-    </TouchableOpacity>
 
   </View>
 )};
@@ -66,46 +66,62 @@ render() {
         leg_str+=count + " : " + leg[i].slice(1)+"\n"
       }
       this.setState({
-        result: "Estimated Duration: " + JSON.stringify(responseJson.duration).slice(1,-1) + "\nSteps:\n" + leg_str.slice(0,-2)
+        result: "Estimated Duration: " + JSON.stringify(responseJson.duration).slice(1,-1) + "\n\nSteps:\n" + leg_str.slice(0,-2)
       });
   })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message);
     });
   } 
-
-  refresh() {
-    alert(this.state.FROMtext + "\n"+ this.state.TOtext);
-  }
-  
 }
 
 const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
-  header: {
-    top: 10,
-    backgroundColor:'#21abcd',
-    alignItems: 'center',
-    justifyContent:'center',
-    height: 80,
-  },
   headerText: {
-    fontSize: 28,
-    color:'white'
+    paddingLeft: 45,
+    paddingTop: 50,
+    fontSize: 40,
+    color:'black'
+  },
+  headerText2: {
+    paddingLeft: 100,
+    paddingTop: 5,
+    paddingBottom: 14,
+    fontSize: 40,
+    color: 'black',
+    //alignSelf: 'center'
   },
   FROMtext: {
-    top:10,
-    //paddingTop: 50,
-    fontSize: 20,
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 16,  
+    margin: 16,  
+    marginTop: 14,
+    marginBottom: 8,
+    fontSize: 16,
+    borderColor: 'gray',
     color: 'black',
-    height: 60,
+    height: 50,
  },
   TOtext: {
-    fontSize: 20,
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 16,  
+    margin: 16,
+    marginTop: 8,
+    marginBottom: 20,
+    fontSize: 16,
+    borderColor: 'gray',
     color: 'black',
-    height: 60, 
+    height: 50, 
   },
   switchButtonText:{
     color: '#fff',
@@ -122,17 +138,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
   },
-  
   findButton: {
     backgroundColor: '#21abcd',
-    width: 70,
+    width: 200,
     height: 50,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-end',
     end: 10,
-
   },
   findButtonText: {
     color: '#fff',
@@ -146,7 +160,7 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     backgroundColor: '#21abcd',
-    width: 70,
+    width: 90,
     height: 50,
     borderRadius: 30,
     justifyContent: 'center',
@@ -161,6 +175,8 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   text: {
+    padding: 12,
+    paddingTop: 20,
     fontSize: 20,
     color: 'black',
     justifyContent: 'center',
