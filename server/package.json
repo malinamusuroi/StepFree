@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "start": "node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@google/maps": "^0.4.6",
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "request": "^2.87.0",
+    "xml2js": "^0.4.19",
+    "zip-array": "^1.0.1"
   },
   "author": "",
   "license": "ISC"
