@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
+  Image,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -22,39 +23,41 @@ export default class Main extends Component {
 
 render() {
   return(
+    <View style={styles.container}>
+      <Image source = {require('./background.jpeg')}
+            style = {styles.loginForm}>
+      </Image>
+      
+      <View style={styles.header}>
+        <Text style={styles.headerText}>EMPOWER </Text>
+      </View>
 
-  <View style={styles.container}>
+      <View style = {styles.header}>
+        <Text style={styles.headerText2}>MOVEMENT</Text>
+      </View>
 
-    <View style={styles.header}>
-      <Text style={styles.headerText}>EMPOWER </Text>
+     <TextInput style={styles.FROMtext}
+        placeholder="Enter Start"
+        onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
+
+      <TextInput style={styles.TOtext}
+        placeholder="Enter Destination"
+        onChangeText = {(TOtext)=>this.setState({TOtext})}/>
+
+      <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
+        <Text style = {styles.findButtonText}>FIND ROUTE♿︎
+        </Text>
+      </TouchableOpacity>
+
+      <ScrollView>
+          <Text style={styles.text}> {this.state.result} </Text>
+      </ScrollView>
     </View>
-    <View style = {styles.header}>
-    <Text style={styles.headerText2}>MOVEMENT</Text>
-    </View>
-
-   <TextInput style={styles.FROMtext}
-      placeholder="Enter Start"
-      onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
-
-    <TextInput style={styles.TOtext}
-      placeholder="Enter Destination"
-      onChangeText = {(TOtext)=>this.setState({TOtext})}/>
-
-    <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
-      <Text style = {styles.findButtonText}>FIND ROUTE♿︎
-      </Text>
-    </TouchableOpacity>
-
-    <ScrollView>
-        <Text style={styles.text}> {this.state.result} </Text>
-    </ScrollView>
-
-  </View>
-)};
+  )};
 
   search() {
-    var origin1 = encodeURIComponent(this.state.FROMtext);
-     var destination1 = encodeURIComponent(this.state.TOtext);
+    const origin1 = encodeURIComponent(this.state.FROMtext);
+    const destination1 = encodeURIComponent(this.state.TOtext);
     fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
     //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
     .then((response) => response.json())
@@ -79,19 +82,25 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
+  loginForm: {
+    flex: 1,
+    width: 415,
+    height: 700,
+    position: 'absolute', 
+    resizeMode: 'cover'
+  },
   headerText: {
-    paddingLeft: 45,
+    paddingLeft: 90,
     paddingTop: 50,
     fontSize: 40,
     color:'black'
   },
   headerText2: {
-    paddingLeft: 100,
+    paddingLeft: 130,
     paddingTop: 5,
-    paddingBottom: 14,
+    paddingBottom: 38,
     fontSize: 40,
     color: 'black',
-    //alignSelf: 'center'
   },
   FROMtext: {
     borderWidth: 1,
@@ -99,12 +108,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    padding: 16,  
+    paddingLeft: 20,  
+    paddingRight: 20,  
     margin: 16,  
     marginTop: 14,
     marginBottom: 8,
     fontSize: 16,
-    borderColor: 'gray',
+    borderColor: 'black',
     color: 'black',
     height: 50,
  },
@@ -117,9 +127,9 @@ const styles = StyleSheet.create({
     padding: 16,  
     margin: 16,
     marginTop: 8,
-    marginBottom: 20,
+    marginBottom: 40,
     fontSize: 16,
-    borderColor: 'gray',
+    borderColor: 'black',
     color: 'black',
     height: 50, 
   },
