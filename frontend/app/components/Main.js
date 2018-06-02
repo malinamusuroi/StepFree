@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
       flex: 1,
   },
   headerText: {
-    paddingLeft: 47,
+    paddingLeft: 45,
     paddingTop: 50,
     fontSize: 40,
     color:'black'
   },
   headerText2: {
-    paddingLeft: 102,
+    paddingLeft: 100,
     paddingTop: 5,
     paddingBottom: 14,
     fontSize: 40,
