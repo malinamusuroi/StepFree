@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
+  Image,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -22,84 +23,115 @@ export default class Main extends Component {
 
 render() {
   return(
+    <View style={styles.container}>
+      <Image source = {require('./background.jpeg')}
+            style = {styles.loginForm}>
+      </Image>
+      
+      <View style={styles.header}>
+        <Text style={styles.headerText}>EMPOWER </Text>
+      </View>
 
-  <View style={styles.container}>
+      <View style = {styles.header}>
+        <Text style={styles.headerText2}>MOVEMENT</Text>
+      </View>
 
-    <View style={styles.header}>
-      <Text style={styles.headerText}>APP NAME TBD</Text>
+     <TextInput style={styles.FROMtext}
+        placeholder="Enter Start"
+        onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
+
+      <TextInput style={styles.TOtext}
+        placeholder="Enter Destination"
+        onChangeText = {(TOtext)=>this.setState({TOtext})}/>
+
+      <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
+        <Text style = {styles.findButtonText}>FIND ROUTE♿︎
+        </Text>
+      </TouchableOpacity>
+
+      <ScrollView>
+          <Text style={styles.text}> {this.state.result} </Text>
+      </ScrollView>
     </View>
-
-   <TextInput style={styles.FROMtext}
-      placeholder="Enter Start:"
-      onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
-
-    <TextInput style={styles.TOtext}
-      placeholder="Enter Destination:"
-      onChangeText = {(TOtext)=>this.setState({TOtext})}/>
-
-    <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
-      <Text style = {styles.findButtonText}>FIND</Text>
-    </TouchableOpacity>
-
-    <ScrollView>
-      <Text style={styles.text}> {this.state.result} </Text>
-    </ScrollView>
-
-    <TouchableOpacity onPress={this.refresh.bind(this)} style = {styles.refreshButton}>
-      <Text style = {styles.refreshButtonText}>Clear</Text>
-    </TouchableOpacity>
-
-  </View>
-)};
+  )};
 
   search() {
-    var origin1 = encodeURIComponent(this.state.FROMtext);
-     var destination1 = encodeURIComponent(this.state.TOtext);
+    const origin1 = encodeURIComponent(this.state.FROMtext);
+    const destination1 = encodeURIComponent(this.state.TOtext);
     fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
     //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
     .then((response) => response.json())
     .then((responseJson) => {
+      var leg = JSON.stringify(responseJson.legs).slice(1,-1).split("\",")
+      var leg_str = ''
+      for (i=0; i<leg.length; i++){
+        var count = i+1
+        leg_str+=count + " : " + leg[i].slice(1)+"\n"
+      }
       this.setState({
-        result: JSON.stringify(responseJson)
+        result: "Estimated Duration: " + JSON.stringify(responseJson.duration).slice(1,-1) + "\n\nSteps:\n" + leg_str.slice(0,-2)
       });
   })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message);
     });
   } 
-
-  refresh() {
-    alert(this.state.FROMtext + "\n"+ this.state.TOtext);
-  }
-  
 }
 
 const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
-  header: {
-    top: 10,
-    backgroundColor:'#21abcd',
-    alignItems: 'center',
-    justifyContent:'center',
-    height: 80,
+  loginForm: {
+    flex: 1,
+    width: 415,
+    height: 700,
+    position: 'absolute', 
+    resizeMode: 'cover'
   },
   headerText: {
-    fontSize: 28,
-    color:'white'
+    paddingLeft: 90,
+    paddingTop: 50,
+    fontSize: 40,
+    color:'black'
+  },
+  headerText2: {
+    paddingLeft: 130,
+    paddingTop: 5,
+    paddingBottom: 38,
+    fontSize: 40,
+    color: 'black',
   },
   FROMtext: {
-    top:10,
-    //paddingTop: 50,
-    fontSize: 20,
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    paddingLeft: 20,  
+    paddingRight: 20,  
+    margin: 16,  
+    marginTop: 14,
+    marginBottom: 8,
+    fontSize: 16,
+    borderColor: 'black',
     color: 'black',
-    height: 60,
+    height: 50,
  },
   TOtext: {
-    fontSize: 20,
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 16,  
+    margin: 16,
+    marginTop: 8,
+    marginBottom: 40,
+    fontSize: 16,
+    borderColor: 'black',
     color: 'black',
-    height: 60, 
+    height: 50, 
   },
   switchButtonText:{
     color: '#fff',
@@ -116,19 +148,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
   },
-  
   findButton: {
     backgroundColor: '#21abcd',
-    width: 70,
+    width: 200,
     height: 50,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    //alignItems: 'center',
     alignSelf: 'flex-end',
-    //top: -20,
     end: 10,
-
   },
   findButtonText: {
     color: '#fff',
@@ -142,7 +170,7 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     backgroundColor: '#21abcd',
-    width: 70,
+    width: 90,
     height: 50,
     borderRadius: 30,
     justifyContent: 'center',
@@ -157,6 +185,10 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   text: {
+    padding: 12,
+    paddingTop: 20,
     fontSize: 20,
+    color: 'black',
+    justifyContent: 'center',
   },
 });
