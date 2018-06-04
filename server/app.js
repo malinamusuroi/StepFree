@@ -4,7 +4,6 @@ const request = require('request');
 const zip = require('zip-array');
 
 app.get('/getDirections', function (req, res) {
-
     getDirections(req.query.origin, req.query.destination, function (json) {
         res.json(json);
     });
@@ -43,7 +42,8 @@ function getAccessibility(callback) {
             if (!err) {
                 const xml = {
                     /* Lift existence: Yes/No/Undefined */
-                    liftExistence: getLiftInformation(result.Stations)
+                    liftExistence: getLiftInformation(result.Stations),
+                    lineInformation: getLineInformation(result.Stations)
                 };
                 callback(JSON.stringify(xml));
             } else {
@@ -63,7 +63,14 @@ function getStationNames(stations) {
 
 function getLiftInformation(stations) {
     return zip.zip_longest(getStationNames(stations),
-        stations.Station.map((station) => station.Accessibility[0].Lifts[0].AccessViaLift[0]));
+        stations.Station.map((station) => station.Accessibility[0].Lifts[0].AccessViaLift[0])
+                        .map((info) => (info === "") ? "No" : info));
+}
+
+function getLineInformation(stations) {
+    const usableStations = (stations.Station).filter((i) => !(i.Lines[0] === "\r\n\r\n    "));
+    return zip.zip_longest(usableStations.map((station) => station.StationName),
+        usableStations.map((station) => station.Lines[0]).map((line) => line.Line));
 }
 
 app.listen(process.env.PORT || 3000);
