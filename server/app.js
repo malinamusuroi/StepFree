@@ -5,12 +5,8 @@ const zip = require('zip-array');
 
 app.get('/getDirections', function (req, res) {
     getDirections(req.query.origin, req.query.destination, function (json) {
-        res.json(json);
+        res.json({routes: json});
     });
-});
-
-getAccessibility(function (body) {
-    console.log(body);
 });
 
 const googleMapsClient = require('@google/maps').createClient({
@@ -22,17 +18,19 @@ function getDirections(origin, destination, callback) {
         origin: origin,
         destination: destination,
         mode: 'transit',
+        alternatives: true
     }, function (err, response) {
         if (!err) {
-            const j = {
-                duration: response.json.routes[0].legs[0].duration.text,
-                legs: getInstruction(response.json.routes[0].legs)
-            };
-            callback(j)
+            callback(response.json.routes.map(function (x) {
+                return {
+                    duration: x.legs[0].duration.text,
+                    legs: getInstruction(x.legs)
+                };
+            }));
         } else {
             console.error(err);
         }
-    });
+    })
 }
 
 function getAccessibility(callback) {
@@ -64,7 +62,7 @@ function getStationNames(stations) {
 function getLiftInformation(stations) {
     return zip.zip_longest(getStationNames(stations),
         stations.Station.map((station) => station.Accessibility[0].Lifts[0].AccessViaLift[0])
-                        .map((info) => (info === "") ? "No" : info));
+            .map((info) => (info === "") ? "No" : info));
 }
 
 function getLineInformation(stations) {
