@@ -21,16 +21,37 @@ function getDirections(origin, destination, callback) {
         alternatives: true
     }, function (err, response) {
         if (!err) {
-            callback(response.json.routes.map(function (x) {
+            callback(response.json.routes.map(function (route) {
                 return {
-                    duration: x.legs[0].duration.text,
-                    legs: getInstruction(x.legs)
+                    duration: route.legs[0].duration.text,
+                    departureTime: route.legs[0].departure_time.text,
+                    arrivalTime: route.legs[0].arrival_time.text,
+                    steps: getSteps(route.legs[0])
                 };
             }));
         } else {
             console.error(err);
         }
     })
+}
+
+function getSteps(leg) {
+    return leg.steps.map(function (step) {
+        return {
+            travelMode: step.travel_mode,
+            durationOfStep: step.duration.text,
+            instruction: step.html_instructions,
+            lineDetails: step.transit_details != null ?
+                {
+                    departureStop: step.transit_details.departure_stop.name,
+                    lineType: step.transit_details.line.name,
+                    vehicle: step.transit_details.line.vehicle.type,
+                    number: step.transit_details.line.short_name,
+                    numberOfStops: step.transit_details.num_stops,
+                    arrivalStop: step.transit_details.arrival_stop.name
+                } : null
+        }
+    });
 }
 
 function getAccessibility(callback) {
