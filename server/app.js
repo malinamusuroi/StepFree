@@ -1,16 +1,12 @@
 const express = require('express');
 const app = express();
 const request = require('request');
-const zip = require('zip-array');
+const inArray = require('in-array');
 
 app.get('/getDirections', function (req, res) {
     getDirections(req.query.origin, req.query.destination, function (json) {
         res.json(json);
     });
-});
-
-getAccessibility(function (body) {
-    console.log(body);
 });
 
 const googleMapsClient = require('@google/maps').createClient({
@@ -19,20 +15,35 @@ const googleMapsClient = require('@google/maps').createClient({
 
 function getDirections(origin, destination, callback) {
     googleMapsClient.directions({
-        origin: origin,
-        destination: destination,
-        mode: 'transit',
-    }, function (err, response) {
-        if (!err) {
-            const j = {
-                duration: response.json.routes[0].legs[0].duration.text,
-                legs: getInstruction(response.json.routes[0].legs)
-            };
-            callback(j)
-        } else {
-            console.error(err);
+            origin: origin,
+            destination: destination,
+            mode: 'transit',
+        }, function (err, response) {
+            if (!err) {
+                getAccessibility(function (allStations) {
+                    const j = {
+                        duration: response.json.routes[0].legs[0].duration.text,
+                        stations: usedStations(response.json.routes[0].legs),
+                        accessibility: allStations.filter((station) => inArray(usedStations(response.json.routes[0].legs),
+                            station.stationName))
+                    };
+                    callback(j);
+                });
+            }
+            else {
+                console.error(err);
+            }
         }
-    });
+    );
+}
+
+function usedStations(legs) {
+    const stations = legs[0].steps.filter((step) => step.travel_mode === "TRANSIT")
+        .map((e) => e.transit_details)
+        .map((details) => [details.departure_stop.name, details.arrival_stop.name]);
+    return Array.from(new Set([].concat.apply([], stations)))
+        .map((station) => (station.replace(" Station", "")))
+        .map((station) => (station.replace(" London Underground", "")));
 }
 
 function getAccessibility(callback) {
@@ -40,12 +51,14 @@ function getAccessibility(callback) {
         const parseString = require('xml2js').parseString;
         parseString(body, function (err, result) {
             if (!err) {
-                const xml = {
-                    /* Lift existence: Yes/No/Undefined */
-                    liftExistence: getLiftInformation(result.Stations),
-                    lineInformation: getLineInformation(result.Stations)
-                };
-                callback(JSON.stringify(xml));
+                callback(result.Stations.Station.map(function (station) {
+                    return {
+                        stationName: station.StationName[0],
+                        lift: (station.Accessibility[0].Lifts[0].AccessViaLift[0] === "" ? "No" :
+                            station.Accessibility[0].Lifts[0].AccessViaLift[0]),
+                        lineInfo: station.Lines[0] === "\r\n\r\n    " ? null : getLineDetails(station.Lines[0])
+                    };
+                }));
             } else {
                 console.error(err);
             }
@@ -53,24 +66,19 @@ function getAccessibility(callback) {
     });
 }
 
-function getInstruction(legs) {
-    return legs[0].steps.map((step) => step.html_instructions);
-}
-
-function getStationNames(stations) {
-    return stations.Station.map((station) => station.StationName[0]);
-}
-
-function getLiftInformation(stations) {
-    return zip.zip_longest(getStationNames(stations),
-        stations.Station.map((station) => station.Accessibility[0].Lifts[0].AccessViaLift[0])
-                        .map((info) => (info === "") ? "No" : info));
-}
-
-function getLineInformation(stations) {
-    const usableStations = (stations.Station).filter((i) => !(i.Lines[0] === "\r\n\r\n    "));
-    return zip.zip_longest(usableStations.map((station) => station.StationName),
-        usableStations.map((station) => station.Lines[0]).map((line) => line.Line));
+function getLineDetails(line) {
+    return line.Line.map(function (line) {
+        return {
+            lineName: line.LineName[0],
+            direction: line.Direction[0],
+            directionTowards: line.DirectionTowards[0],
+            stepMin: line.StepMin[0],
+            stepMax: line.StepMax[0],
+            gapMin: line.GapMin[0],
+            gapMax: line.GapMax[0],
+            manualRamp: line.LevelAccessByManualRamp[0]
+        };
+    });
 }
 
 app.listen(process.env.PORT || 3000);
