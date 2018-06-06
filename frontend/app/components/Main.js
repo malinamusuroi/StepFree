@@ -22,6 +22,9 @@ export default class Main extends Component {
   }
 
 render() {
+
+  const { navigate } =  this.props.navigation;
+
   return(
     <View style={styles.container}>
       <Image source = {require('./background.jpeg')}
@@ -44,14 +47,10 @@ render() {
         placeholder="Enter Destination"
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-      <TouchableOpacity onPress= {() => this.search()} style = {styles.findButton}>
-        <Text style = {styles.findButtonText}>FIND ROUTE♿︎
-        </Text>
+      <TouchableOpacity onPress= {() => this.pressNav('search', navigate)} style = {styles.findButton}>
+        <Text style = {styles.findButtonText}>FIND ROUTE♿︎</Text>
       </TouchableOpacity>
 
-      <ScrollView>
-          <Text style={styles.text}> {this.state.result} </Text>
-      </ScrollView>
     </View>
   )};
 
@@ -62,20 +61,22 @@ render() {
     //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
     .then((response) => response.json())
     .then((responseJson) => {
-      var leg = JSON.stringify(responseJson.legs).slice(1,-1).split("\",")
-      var leg_str = ''
-      for (i=0; i<leg.length; i++){
-        var count = i+1
-        leg_str+=count + " : " + leg[i].slice(1)+"\n"
-      }
+      console.log(responseJson)
       this.setState({
-        result: "Estimated Duration: " + JSON.stringify(responseJson.duration).slice(1,-1) + "\n\nSteps:\n" + leg_str.slice(0,-2)
-      });
+        result : JSON.stringify(responseJson)
+      })
   })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message);
     });
   } 
+
+  pressNav(x, nav) {
+    if (x=='search') {
+      nav('Routes')
+      this.search()
+    };
+  }
 }
 
 const styles = StyleSheet.create({
@@ -161,34 +162,5 @@ const styles = StyleSheet.create({
   findButtonText: {
     color: '#fff',
     fontSize: 24
-  },
-  output:{
-    flex: 1,
-    alignSelf: 'center',
-    top: -30,
-    marginBottom: 10,
-  },
-  refreshButton: {
-    backgroundColor: '#21abcd',
-    width: 90,
-    height: 50,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    end: 10,
-    bottom: 10,
-    marginTop: -20
-  },
-  refreshButtonText: {
-    color: '#fff',
-    fontSize: 24
-  },
-  text: {
-    padding: 12,
-    paddingTop: 20,
-    fontSize: 20,
-    color: 'black',
-    justifyContent: 'center',
   },
 });
