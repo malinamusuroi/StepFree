@@ -5,7 +5,7 @@ const inArray = require('in-array');
 
 app.get('/getDirections', function (req, res) {
     getDirections(req.query.origin, req.query.destination, function (json) {
-        res.json(json);
+        res.json({routes: json});
     });
 });
 
@@ -15,26 +15,47 @@ const googleMapsClient = require('@google/maps').createClient({
 
 function getDirections(origin, destination, callback) {
     googleMapsClient.directions({
-            origin: origin,
-            destination: destination,
-            mode: 'transit',
-        }, function (err, response) {
-            if (!err) {
-                getAccessibility(function (allStations) {
-                    const j = {
-                        duration: response.json.routes[0].legs[0].duration.text,
-                        stations: usedStations(response.json.routes[0].legs),
-                        accessibility: allStations.filter((station) => inArray(usedStations(response.json.routes[0].legs),
+        origin: origin,
+        destination: destination,
+        mode: 'transit',
+        alternatives: true
+    }, function (err, response) {
+        if (!err) {
+            getAccessibility(function (allStations) {
+                callback(response.json.routes.map(function (route) {
+                    return {
+                        duration: route.legs[0].duration.text,
+                        departureTime: route.legs[0].departure_time.text,
+                        arrivalTime: route.legs[0].arrival_time.text,
+                        steps: getSteps(route.legs[0]),
+                        accessibility: allStations.filter((station) => inArray(usedStations(route.legs),
                             station.stationName))
                     };
-                    callback(j);
-                });
-            }
-            else {
-                console.error(err);
-            }
+                }));
+            })
+        } else {
+            console.error(err);
         }
-    );
+    })
+}
+
+function getSteps(leg) {
+    return leg.steps.map(function (step) {
+        return {
+            travelMode: step.travel_mode,
+            durationOfStep: step.duration.text,
+            instruction: step.html_instructions,
+            lineDetails: step.transit_details != null ?
+                {
+                    departureStop: step.transit_details.departure_stop.name,
+                    lineType: step.transit_details.line.name,
+                    vehicle: step.transit_details.line.vehicle.type,
+                    number: step.transit_details.line.short_name,
+                    numberOfStops: step.transit_details.num_stops,
+                    arrivalStop: step.transit_details.arrival_stop.name
+                } : null
+        }
+    });
 }
 
 function usedStations(legs) {
@@ -42,8 +63,8 @@ function usedStations(legs) {
         .map((e) => e.transit_details)
         .map((details) => [details.departure_stop.name, details.arrival_stop.name]);
     return Array.from(new Set([].concat.apply([], stations)))
-        .map((station) => (station.replace(" Station", "")))
-        .map((station) => (station.replace(" London Underground", "")));
+        .map((station) => (station.replace(" London Underground Station", "")))
+        .map((station) => (station.replace(" Station", "")));
 }
 
 function getAccessibility(callback) {
