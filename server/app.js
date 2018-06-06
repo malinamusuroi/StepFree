@@ -73,10 +73,10 @@ function getAccessibility(callback) {
         parseString(body, function (err, result) {
             if (!err) {
                 callback(result.Stations.Station.map(function (station) {
+                    const liftExistence = station.Accessibility[0].Lifts[0].AccessViaLift[0];
                     return {
                         stationName: station.StationName[0],
-                        lift: (station.Accessibility[0].Lifts[0].AccessViaLift[0] === "" ? "No" :
-                            station.Accessibility[0].Lifts[0].AccessViaLift[0]),
+                        lift: (liftExistence === "" ? "No" : liftExistence),
                         lineInfo: station.Lines[0] === "\r\n\r\n    " ? null : getLineDetails(station.Lines[0])
                     };
                 }));
