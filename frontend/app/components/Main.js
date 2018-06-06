@@ -47,14 +47,14 @@ render() {
         placeholder="Enter Destination"
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-      <TouchableOpacity onPress= {() => this.pressNav('search', navigate)} style = {styles.findButton}>
+      <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
         <Text style = {styles.findButtonText}>FIND ROUTE♿︎</Text>
       </TouchableOpacity>
 
     </View>
   )};
 
-  search() {
+  search(nav) {
     const origin1 = encodeURIComponent(this.state.FROMtext);
     const destination1 = encodeURIComponent(this.state.TOtext);
     fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
@@ -65,18 +65,12 @@ render() {
       this.setState({
         result : JSON.stringify(responseJson)
       })
+      nav('Routes', {routes: this.state.result})
   })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message);
     });
   } 
-
-  pressNav(x, nav) {
-    if (x=='search') {
-      nav('Routes')
-      this.search()
-    };
-  }
 }
 
 const styles = StyleSheet.create({
