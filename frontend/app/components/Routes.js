@@ -17,13 +17,12 @@ export default class Routes extends Component{
 
     const { navigate } =  this.props.navigation;
     const routes = this.props.navigation.state.params.routes
-    
 		return (
       <View style = {styles.container}>
 			<FlatList
 				data={routes} 
 				renderItem={({item}) =>  
-			  <TouchableHighlight onPress={this._onPressButton} underlayColor="white">
+			  <TouchableHighlight onPress={()=> navigate('RouteInfo')} underlayColor="white">
 					<View style={styles.button}>
             <Text style= {styles.text}>{item}</Text>
           </View> 
@@ -37,18 +36,19 @@ export default class Routes extends Component{
 
 const styles = StyleSheet.create({
   container: {
-		paddingTop: 30,
-		flex: 1,
+	paddingTop: 30,
+	flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
-    fontSize: 20,
-		color: 'black'
+    borderWidth: 1,
+    borderColor: 'black',
+    fontSize: 20
   },
   button: {
     marginBottom: 30,
-		width: 330,
+	width: 330,
     alignItems: 'center',
     backgroundColor: '#2196F3'
   }
