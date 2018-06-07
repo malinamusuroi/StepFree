@@ -1,28 +1,43 @@
 import React, { Component } from 'react';
 import {
+	Alert,
   StyleSheet,
   Text,
-  View
+  View,
+	FlatList,
+	TouchableHighlight
 } from 'react-native';
 
-
-
 export default class Routes extends Component{
-  render() {
+   _onPressButton() {
+  
+	 } 
+	 
+	 render() {
 
     const { navigate } =  this.props.navigation;
     const routes = this.props.navigation.state.params.routes
-
-    return (
-    <Text onPress = {()=> navigate('RouteInfo')} style = {styles.text}>{routes.join("\n\n")}</Text>
-    );
-  }
-};
-
+		return (
+      <View style = {styles.container}>
+			<FlatList
+				data={routes} 
+				renderItem={({item}) =>  
+			  <TouchableHighlight onPress={()=> navigate('RouteInfo')} underlayColor="white">
+					<View style={styles.button}>
+            <Text style= {styles.text}>{item}</Text>
+          </View> 
+        </TouchableHighlight>
+        }
+			/>
+      </View>
+		);
+	 }
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+	paddingTop: 30,
+	flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -30,5 +45,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     fontSize: 20
+  },
+  button: {
+    marginBottom: 30,
+	width: 330,
+    alignItems: 'center',
+    backgroundColor: '#2196F3'
   }
 });
