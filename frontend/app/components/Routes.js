@@ -15,7 +15,7 @@ export default class Routes extends Component{
 
     return (
       <View style = {styles.container}>
-        <Text>{routes}</Text>
+        <Text style = {styles.text}>{routes.join("\n\n")}</Text>
       </View>
     );
   }
@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
+  text: {
+    fontSize: 20
+  }
 });
