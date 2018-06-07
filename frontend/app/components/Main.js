@@ -62,13 +62,16 @@ export default class Main extends Component {
   .then((response) => response.json())
   .then((responseJson) => {
      console.log(responseJson)
-     var steps = []
-     steps = responseJson.routes.map(function(route) {
-       return route.steps
-     }).map(i => this.getInfo(i));
-      
+     var steps = responseJson.routes.map (route => {
+      const steps = route.steps
+      const info = this.getInfo(steps)
+      const array = this.printArray(info)
+      return array;
+    })
+     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
+     
      this.setState({
-        result :JSON.stringify(steps)
+        result: JSON.stringify(steps)
      })
      nav('Routes', {routes: this.state.result})
     })
@@ -77,24 +80,32 @@ export default class Main extends Component {
     });
   } 
 
-
  getInfo(steps) {
-   return steps.map(step=> this.getRoute(step));
+   return steps.map(step => this.getRoute(step));
  }
 
  getRoute(json) {
    var str = '';
-    if (json.travelMode === 'WALKING') {
-      str =str + '♿︎';
-    } else if (json.travelMode === 'TRANSIT') {
-       if (json.lineDetails.vehicle ==='SUBWAY') {
-         str += 'SUBWAY';
-       } else {
-        str+= 'BUS';
+   if (json.travelMode === 'WALKING') {
+      str = str + '♿︎' + json.durationOfStep + ' -> ';
+   } else if (json.travelMode === 'TRANSIT') {
+      if (json.lineDetails.vehicle === 'SUBWAY') {
+         str += 'SUBWAY' + ' ' + json.lineDetails.lineType + ' -> ';
+      } else {
+         str += 'BUS' + ' ' + json.lineDetails.number + ' -> ';
       }
    }
-   return str;
+  return str;
  }
+
+ printArray(array) {
+  var str ='';
+  for (var i = 0;i < array.length; i++) {
+    str +=  array[i];
+  }
+   return str.substring(0, str.length - 5);
+ }
+
 }
 
 const styles = StyleSheet.create({
