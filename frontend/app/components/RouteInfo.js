@@ -7,18 +7,16 @@ import {
 
 
 
-export default class Routes extends Component{
+export default class RouteInfo extends Component{
   render() {
-
-    const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.routes
-
-    return (
-    <Text onPress = {()=> navigate('RouteInfo')} style = {styles.text}>{routes.join("\n\n")}</Text>
-    );
+  	const { navigate } =  this.props.navigation;
+  	return(
+ 	<View style = {styles.container}>
+  		<Text style = {styles.text}>Navigated here </Text>
+  	</View>
+  	);
   }
-};
-
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
+  	textAlign: 'left',
     borderWidth: 1,
     borderColor: 'black',
     fontSize: 20
