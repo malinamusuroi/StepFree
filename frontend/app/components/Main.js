@@ -30,7 +30,7 @@ export default class Main extends Component {
       <Image source = {require('./background.jpeg')}
             style = {styles.loginForm}>
       </Image>
-      
+
       <View style={styles.header}>
         <Text style={styles.headerText}>EMPOWER </Text>
       </View>
@@ -71,7 +71,7 @@ export default class Main extends Component {
      steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
      
      this.setState({
-        result: JSON.stringify(steps)
+        result: steps
      })
      nav('Routes', {routes: this.state.result})
     })
@@ -90,18 +90,18 @@ export default class Main extends Component {
       str = str + '♿︎' + json.durationOfStep + ' -> ';
    } else if (json.travelMode === 'TRANSIT') {
       if (json.lineDetails.vehicle === 'SUBWAY') {
-         str += 'SUBWAY' + ' ' + json.lineDetails.lineType + ' -> ';
+         str += '🚊' + ' ' + json.lineDetails.lineType + ' -> ';
       } else {
-         str += 'BUS' + ' ' + json.lineDetails.number + ' -> ';
+         str += '🚌' + ' ' + json.lineDetails.number + ' -> ';
       }
    }
   return str;
  }
 
  printArray(array) {
-  var str ='';
+  var str = '';
   for (var i = 0;i < array.length; i++) {
-    str +=  array[i];
+    str += array[i];
   }
    return str.substring(0, str.length - 5);
  }
