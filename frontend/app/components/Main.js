@@ -21,16 +21,16 @@ export default class Main extends Component {
     };
   }
 
-render() {
+ render() {
 
-  const { navigate } =  this.props.navigation;
+  const {navigate} = this.props.navigation;
 
   return(
     <View style={styles.container}>
       <Image source = {require('./background.jpeg')}
             style = {styles.loginForm}>
       </Image>
-      
+
       <View style={styles.header}>
         <Text style={styles.headerText}>EMPOWER </Text>
       </View>
@@ -54,23 +54,58 @@ render() {
     </View>
   )};
 
-  search(nav) {
-    const origin1 = encodeURIComponent(this.state.FROMtext);
-    const destination1 = encodeURIComponent(this.state.TOtext);
-    fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
-    //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log(responseJson)
-      this.setState({
-        result : JSON.stringify(responseJson)
-      })
-      nav('Routes', {routes: this.state.result})
-  })
+ search(nav) {
+  const origin1 = encodeURIComponent(this.state.FROMtext);
+  const destination1 = encodeURIComponent(this.state.TOtext);
+  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
+  .then((response) => response.json())
+  .then((responseJson) => {
+     console.log(responseJson)
+     var steps = responseJson.routes.map (route => {
+      const steps = route.steps
+      const info = this.getInfo(steps)
+      const array = this.printArray(info)
+      return array;
+    })
+     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
+     
+     this.setState({
+        result: steps
+     })
+     nav('Routes', {routes: this.state.result})
+    })
     .catch(function(error) {
-    console.error('There has been a problem with your fetch operation: ' + error.message);
+    console.error('There has been a problem with your fetch operation: ' + error.message)
     });
   } 
+
+ getInfo(steps) {
+   return steps.map(step => this.getRoute(step));
+ }
+
+ getRoute(json) {
+   var str = '';
+   if (json.travelMode === 'WALKING') {
+      str = str + '♿︎' + json.durationOfStep + ' -> ';
+   } else if (json.travelMode === 'TRANSIT') {
+      if (json.lineDetails.vehicle === 'SUBWAY') {
+         str += '🚊' + ' ' + json.lineDetails.lineType + ' -> ';
+      } else {
+         str += '🚌' + ' ' + json.lineDetails.number + ' -> ';
+      }
+   }
+  return str;
+ }
+
+ printArray(array) {
+  var str = '';
+  for (var i = 0;i < array.length; i++) {
+    str += array[i];
+  }
+   return str.substring(0, str.length - 5);
+ }
+
 }
 
 const styles = StyleSheet.create({
