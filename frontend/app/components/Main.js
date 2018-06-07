@@ -17,7 +17,8 @@ export default class Main extends Component {
     this.state = {
       FROMtext: '',
       TOtext: '',
-      result: ''
+      result: '',
+      result2: ' ',
     };
   }
 
@@ -71,9 +72,10 @@ export default class Main extends Component {
      steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
      
      this.setState({
-        result: steps
+        result: steps,
+        result2: responseJson.routes
      })
-     nav('Routes', {routes: this.state.result})
+     nav('Routes', {routes: this.state.result, routes2: this.state.result2})
     })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)

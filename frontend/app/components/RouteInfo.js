@@ -7,17 +7,19 @@ import {
 } from 'react-native';
 
 
-
 export default class RouteInfo extends Component{
   render() {
   	const { navigate } =  this.props.navigation;
+    const routes = this.props.navigation.state.params.routes2
 
-  return(
+   return(
  	    <View style = {styles.container}>
-  		   <Image source = {require('./background2.jpeg')}
-            style = {styles.background}>
-         </Image>
-        <Text style = {styles.text}>Navigated here </Text>
+  	  	   <Image source = {require('./background2.jpeg')}
+             style = {styles.background}>
+           </Image>
+         <View style = {styles.button}>
+            <Text style = {styles.text}> {JSON.stringify(routes)} </Text>
+         </View>
   	  </View>
   	);
   }
@@ -36,9 +38,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     resizeMode: 'cover'
   },
+  button: {
+    backgroundColor: 'white'
+  },
   text: {
+    color: 'black',
   	textAlign: 'left',
-    borderWidth: 1,
     borderColor: 'black',
     fontSize: 20
   }
