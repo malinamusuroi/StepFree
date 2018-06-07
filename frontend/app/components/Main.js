@@ -68,8 +68,9 @@ export default class Main extends Component {
       const array = this.printArray(info)
       return array;
     })
-     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
      
+     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + '\n Duration: ' + x.duration +
+						                                                                        '\n' + this.printStepFree(x.accessibility)));   
      this.setState({
         result: steps
      })
@@ -96,6 +97,13 @@ export default class Main extends Component {
       }
    }
   return str;
+ }
+
+ printStepFree(info) {
+	 if (info.charAt(0) === 'N') {
+	   return '❌' + info;
+	 }
+	 return '✅'  + info;
  }
 
  printArray(array) {
