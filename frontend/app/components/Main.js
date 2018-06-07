@@ -71,9 +71,15 @@ export default class Main extends Component {
     })
      steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + ' ' + x.duration)); 
      
+    var array =  responseJson.routes.map(route => {
+      var steps = route.steps
+      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n' + x.instruction + ' ' + this.getLineDetails(x));
+      return steps;
+    })
+
      this.setState({
         result: steps,
-        result2: responseJson.routes
+        result2: array
      })
      nav('Routes', {routes: this.state.result, routes2: this.state.result2})
     })
@@ -81,6 +87,15 @@ export default class Main extends Component {
     console.error('There has been a problem with your fetch operation: ' + error.message)
     });
   } 
+
+ getLineDetails(json) {
+   if (json.lineDetails == null) {
+     return ' ';
+   } else {
+     return ('\n Departure Stop: ' + json.lineDetails.departureStop + '\n Arrival Stop: ' + json.lineDetails.arrivalStop
+               + '\n Number of stops:' + json.lineDetails.numberOfStops) ;
+   }
+ }
 
  getInfo(steps) {
    return steps.map(step => this.getRoute(step));

@@ -18,7 +18,7 @@ export default class RouteInfo extends Component{
              style = {styles.background}>
            </Image>
          <View style = {styles.button}>
-            <Text style = {styles.text}> {JSON.stringify(routes)} </Text>
+            <Text style = {styles.text}> {routes.join("\n\n")} </Text>
          </View>
   	  </View>
   	);
@@ -39,9 +39,14 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   button: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8, 
+    borderTopRightRadius: 8
   },
   text: {
+    margin: 5,
     color: 'black',
   	textAlign: 'left',
     borderColor: 'black',
