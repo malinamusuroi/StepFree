@@ -72,7 +72,7 @@ export default class Main extends Component {
      
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
-      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n' + x.instruction + ' ' + this.getLineDetails(x));
+      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
       return steps;
     })
 
@@ -93,8 +93,8 @@ export default class Main extends Component {
    if (json.lineDetails == null) {
      return ' ';
    } else {
-     return ('\n Departure Stop: ' + json.lineDetails.departureStop + '\n Arrival Stop: ' + json.lineDetails.arrivalStop
-               + '\n Number of stops:' + json.lineDetails.numberOfStops) ;
+     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop
+               + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
    }
  }
 
@@ -128,7 +128,7 @@ export default class Main extends Component {
   for (var i = 0;i < array.length; i++) {
     str += array[i];
   }
-   return str.substring(0, str.length - 5);
+   return str.substring(0, str.length - 4);
  }
 
 }

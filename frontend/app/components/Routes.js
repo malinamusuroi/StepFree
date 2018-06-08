@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 2,
     margin: 8,
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'left'
   },
   button: {
     borderWidth: 1,
@@ -81,7 +82,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     marginBottom: 10,
 	  width: 340,
-    alignItems: 'center',
     backgroundColor: 'white'
   },
   touchable: {

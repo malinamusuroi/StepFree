@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   Image,
+  ScrollView,
   View
 } from 'react-native';
 
@@ -17,9 +18,9 @@ export default class RouteInfo extends Component{
   	  	   <Image source = {require('./background2.jpeg')}
              style = {styles.background}>
            </Image>
-         <View style = {styles.button}>
+        <View style = {styles.button}>
             <Text style = {styles.text}> {routes.join("\n\n")} </Text>
-         </View>
+        </View>
   	  </View>
   	);
   }
@@ -34,22 +35,22 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: 415, 
-    height: 715,
+    height: 717,
     position: 'absolute',
     resizeMode: 'cover'
   },
   button: {
     backgroundColor: 'white',
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderTopLeftRadius: 8, 
-    borderTopRightRadius: 8
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopLeftRadius: 12, 
+    borderTopRightRadius: 12
   },
   text: {
     margin: 5,
     color: 'black',
   	textAlign: 'left',
     borderColor: 'black',
-    fontSize: 20
+    fontSize: 18
   }
 });
