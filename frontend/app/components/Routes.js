@@ -10,6 +10,13 @@ import {
 } from 'react-native';
 
 export default class Routes extends Component{
+  constructor(props) {
+    super(props);
+    this.state ={
+      routes: '',
+      routes2: ''
+    };
+  }
   static navigationOptions = {
     title: 'Routes'
   };
@@ -21,8 +28,9 @@ export default class Routes extends Component{
 	 render() {
 
     const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.routes
-		
+    const routes = this.props.navigation.state.params.routes;
+	  const routes2 = this.props.navigation.state.params.routes2
+     
    return (
     <View style = {styles.container}>
       <Image source = {require('./background2.jpeg')}
@@ -32,9 +40,9 @@ export default class Routes extends Component{
       <FlatList 
         data={routes} 
         keyExtractor={(r, i) => i + ''}
-        renderItem={({item}) =>  
-        <TouchableOpacity onPress={()=> navigate('RouteInfo')} underlayColor="white" style={styles.touchable}>
-          <View style={styles.button}>
+				renderItem={({item, index}) =>  
+			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
+					<View style={styles.button}>
             <Text style= {styles.text}>{item}</Text>
           </View> 
          </TouchableOpacity>

@@ -17,7 +17,8 @@ export default class Main extends Component {
     this.state = {
       FROMtext: '',
       TOtext: '',
-      result: ''
+      result: '',
+      result2: ' ',
     };
   }
 
@@ -69,17 +70,33 @@ export default class Main extends Component {
       return array;
     })
      
+    var array =  responseJson.routes.map(route => {
+      var steps = route.steps
+      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n' + x.instruction + ' ' + this.getLineDetails(x));
+      return steps;
+    })
+
      steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + '\n Duration: ' + x.duration +
 						                                                                        '\n' + this.printStepFree(x.accessibility)));   
      this.setState({
-        result: steps
+        result: steps,
+        result2: array
      })
-     nav('Routes', {routes: this.state.result})
+     nav('Routes', {routes: this.state.result, routes2: this.state.result2})
     })
     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)
     });
   } 
+
+ getLineDetails(json) {
+   if (json.lineDetails == null) {
+     return ' ';
+   } else {
+     return ('\n Departure Stop: ' + json.lineDetails.departureStop + '\n Arrival Stop: ' + json.lineDetails.arrivalStop
+               + '\n Number of stops:' + json.lineDetails.numberOfStops) ;
+   }
+ }
 
  getInfo(steps) {
    return steps.map(step => this.getRoute(step));
