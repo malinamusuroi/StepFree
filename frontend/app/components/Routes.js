@@ -37,20 +37,20 @@ export default class Routes extends Component{
          style = {styles.background}>
       </Image>
 
-			<FlatList
-				data={routes} 
+      <FlatList 
+        data={routes} 
         keyExtractor={(r, i) => i + ''}
 				renderItem={({item, index}) =>  
 			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
 					<View style={styles.button}>
             <Text style= {styles.text}>{item}</Text>
           </View> 
-        </TouchableOpacity>
+         </TouchableOpacity>
         }
-			/>
-      </View>
-		);
-	 }
+      />
+    </View>
+    );
+   }
 }
 
 const styles = StyleSheet.create({
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   text: {
+    marginLeft: 2,
     margin: 8,
     fontSize: 20
   },
@@ -78,9 +79,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     borderColor: 'black',
-    marginBottom: 30,
+    marginBottom: 10,
 	  width: 340,
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  touchable: {
+   marginLeft: 2	
+	}
 });

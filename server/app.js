@@ -28,15 +28,22 @@ function getDirections(origin, destination, callback) {
                         departureTime: route.legs[0].departure_time.text,
                         arrivalTime: route.legs[0].arrival_time.text,
                         steps: getSteps(route.legs[0]),
-                        accessibility: allStations.filter((station) => inArray(usedStations(route.legs),
-                            station.stationName))
+                        accessibility: '' + isStepFree(allStations.filter((station) => inArray(usedStations(route.legs),
+                            station.stationName)))
                     };
-                }));
+                })//.filter((r) => r.accessibility)
+                );
             })
         } else {
             console.error(err);
         }
     })
+}
+
+function isStepFree(access) {
+    if (access.length === 0) {return "Step Free Route"}
+    var info = access.map((station) => station.lift === 'Yes').reduce((x, y) => x && y);
+    return info ? "Step Free Route" : "Not Step Free Route"
 }
 
 function getSteps(leg) {
