@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  InlineImage,
 	FlatList,
 	TouchableOpacity
 } from 'react-native';
@@ -45,7 +46,7 @@ export default class Routes extends Component{
 			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
            <View>
-              <Text style = {styles.text}>  {this.getSteps(item)} </Text>
+              <Text style = {styles.text}>{this.getSteps(item)} </Text>
            </View>
            <Text style = {styles.text}> Duration: {item.duration} </Text>
            <Text style = {styles.text}> {this.printStepFree(item.accessibility)}</Text>
@@ -64,23 +65,31 @@ export default class Routes extends Component{
  }
  
  getInfo(steps) {
-   return steps.map(step => this.getRoute(step));
+   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1));
  }
 
- getRoute(json) {
+ getRoute(json, isLast) {
    if (json.travelMode === 'WALKING') {
-    return <View> 
-              <Text style = {styles.text}>♿︎{json.durationOfStep} -></Text>
+     const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
+     return <View style = {{flexDirection:'row'}}> 
+              <Image source = {require('./wheel.png')} style = {styles.wheel}/>
+              {arrow}
            </View>
    } else if (json.travelMode === 'TRANSIT') {
+      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/> 
         if (json.lineDetails.vehicle === 'SUBWAY') {
-          return <View>
-                   <Text style = {styles.text} >🚊 {json.lineDetails.lineType}-></Text>
+          return <View style = {{flexDirection:'row'}}>
+                   <Image source ={require('./icon.jpg')} style = {styles.subway}/>
+                   <Text style = {styles.text2} > {json.lineDetails.lineType} </Text>
+                    {arrow}
                  </View>
       } else {
-          return <View>
-                   <Text style = {styles.text}>🚌 {json.lineDetails.number} -></Text>
-                 </View>
+         const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/>
+          return <View style = {{flexDirection: 'row'}}>
+                   <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
+                   <Text style = {styles.text2}> ({json.lineDetails.number}) </Text>
+                   {arrow}
+                </View>
       } 
    }
    return null;
@@ -108,11 +117,52 @@ const styles = StyleSheet.create({
     position: 'absolute',
     resizeMode: 'cover'
   },
+  text2: {
+    fontSize: 16,
+    color: 'black',
+    marginTop: 2
+  },
+  subway: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 3
+ },
+  wheel: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -2
+  },
+  arrow: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -1
+  },
+  arrow2: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4
+  },
+  bus: {
+    width: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 18,
+    marginTop: 3
+  },
   text: {
     marginLeft: 2,
     margin: 0,
-    fontSize: 20,
-    textAlign: 'left'
+    fontSize: 18,
+    textAlign: 'left',
+    marginBottom: 0
   },
   button: {
     borderWidth: 1,
