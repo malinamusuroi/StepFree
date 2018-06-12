@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  Navigator,
+  Geolocation,
   View
  } from 'react-native';
 
@@ -36,7 +38,7 @@ export default class Main extends Component {
             style = {styles.loginForm}>
       </Image>
 
-      <View style={styles.header}>
+     <View style={styles.header}>
         <Text style={styles.headerText}>EMPOWER</Text>
       </View>
 
@@ -44,13 +46,18 @@ export default class Main extends Component {
         <Text style={styles.headerText2}>MOVEMENT</Text>
       </View>
 
+    <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
+      <Image source = {require('./loc.png')} style = {{width: 25, height: 25, marginTop: 6, marginLeft: 20}}/>
+    </TouchableOpacity>
+
       <TouchableOpacity onPress={this.displayTimePicker}  style = {styles.timePickButton}>
         <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
       </TouchableOpacity>
 
       <TextInput style={styles.FROMtext}
         placeholder="Enter Start"
-        onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
+        value={this.state.useCurrentLocation ? "Using Current Location" : this.state.FROMtext}
+        onChangeText = {(FROMtext)=>this.setState({FROMtext: FROMtext, useCurrentLocation: false})}/>
 
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
@@ -68,13 +75,25 @@ export default class Main extends Component {
         titleIOS= 'Pick a departure time'
       />
     </View>
-  )};
+  )}
+
+  getCurrentLoc() {
+    navigator.geolocation.getCurrentPosition((m) => this.geo_success(m))
+  }
+
+   geo_success(m) {
+     this.setState( {
+       FROMtext: m.coords.latitude + ',' + m.coords.longitude,
+       useCurrentLocation: true
+    })
+  }
+
 
  search(nav) {
   const origin1 = encodeURIComponent(this.state.FROMtext);
   const destination1 = encodeURIComponent(this.state.TOtext);
   const departureTime1 = encodeURIComponent(this.state.departureTime);
-  //fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+ // fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
@@ -156,6 +175,10 @@ const styles = StyleSheet.create({
     color: 'black',
     height: 50,
  },
+  image: {
+    width: 20, 
+    height: 20
+  },
   TOtext: {
     borderWidth: 1,
     borderBottomLeftRadius: 8,
