@@ -8,8 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  View,
-	Alert
+  View
  } from 'react-native';
 
 
@@ -21,9 +20,9 @@ export default class Main extends Component {
       TOtext: '',
       json: '',
       result2: ' ',
-			isTimePickerVisible: false,
-			departureTime: '',
-	    departureText: 'Now' 
+      isTimePickerVisible: false,
+      departureTime: '',
+      departureText: 'Now' 
     };
   }
 
@@ -45,9 +44,9 @@ export default class Main extends Component {
         <Text style={styles.headerText2}>MOVEMENT</Text>
       </View>
 
-			<TouchableOpacity onPress={this.showDateTimePicker}  style = {styles.timePickButton}>
-	      <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
-	    </TouchableOpacity>
+      <TouchableOpacity onPress={this.displayTimePicker}  style = {styles.timePickButton}>
+        <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
+      </TouchableOpacity>
 
       <TextInput style={styles.FROMtext}
         placeholder="Enter Start"
@@ -60,22 +59,21 @@ export default class Main extends Component {
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
         <Text style = {styles.findButtonText}> FIND ROUTE ♿︎</Text>
       </TouchableOpacity>
-	
-			<DateTimePicker
-	      isVisible={this.state.isTimePickerVisible}
-	      onConfirm={this.handleDatePicked}
-	      onCancel={this.hideDateTimePicker}
-				mode= 'datetime'
-				titleIOS= 'Pick a departure time'
-	    />
-
-		</View>
+          
+      <DateTimePicker
+        isVisible={this.state.isTimePickerVisible}
+        onConfirm={this.onTimePickPress}
+        onCancel={this.hideTimePicker}
+        mode= 'datetime'
+        titleIOS= 'Pick a departure time'
+      />
+    </View>
   )};
 
  search(nav) {
   const origin1 = encodeURIComponent(this.state.FROMtext);
   const destination1 = encodeURIComponent(this.state.TOtext);
-	const departureTime1 = encodeURIComponent(this.state.departureTime);
+  const departureTime1 = encodeURIComponent(this.state.departureTime);
   //fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
@@ -86,26 +84,23 @@ export default class Main extends Component {
       return steps;
     })
 
-     this.setState({
-        result2: array,
-        json: responseJson
-     })
-
-     nav('Routes', {json: this.state.json, routes2: this.state.result2})
-     })
-     .catch(function(error) {
+    this.setState({
+      result2: array,
+      json: responseJson
+    })
+    nav('Routes', {json: this.state.json, routes2: this.state.result2})
+  })
+  .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)
-    });
-  } 
+  });
+ } 
 
- showDateTimePicker = () => this.setState({ isTimePickerVisible: true });
-
- hideDateTimePicker = () => this.setState({ isTimePickerVisible: false });
-
- handleDatePicked = (date) => {
-	this.setState({ departureTime: date.getTime()/1000 });
-	this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
-	this.hideDateTimePicker();
+ displayTimePicker = () => this.setState({ isTimePickerVisible: true });
+ hideTimePicker = () => this.setState({ isTimePickerVisible: false });
+ onTimePickPress = (date) => {
+   this.setState({ departureTime: date.getTime()/1000 });
+   this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
+   this.hideTimePicker();
  };
 
 
@@ -113,7 +108,9 @@ export default class Main extends Component {
    if (json.lineDetails == null) {
      return ' ';
    } else {
-     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
+     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + 
+             '\n  Arrival Stop: ' + json.lineDetails.arrivalStop + 
+             '\n  Number of stops: ' + json.lineDetails.numberOfStops);
    }
  }
 
@@ -121,7 +118,7 @@ export default class Main extends Component {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
+    flex: 1,
   },
   loginForm: {
     flex: 1,
@@ -203,18 +200,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24
   },
-	timePickButton: {
-	  backgroundColor: 'rgba(52, 52, 52, 0.3)',
-		width: 350,
-		height: 35,
+  timePickButton: {
+    backgroundColor: 'rgba(52, 52, 52, 0.3)',
+    width: 350,
+    height: 35,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-		alignSelf: 'flex-start',
+    alignSelf: 'flex-start',
     start: 10,
-	},
-	timePickButtonText: {
+  },
+  timePickButtonText: {
     fontSize: 15,
-		paddingLeft: 10
-	},
+    paddingLeft: 10
+  },
 });
