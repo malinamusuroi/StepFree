@@ -4,7 +4,7 @@ const request = require('request');
 const inArray = require('in-array');
 
 app.get('/getDirections', function (req, res) {
-    getDirections(req.query.origin, req.query.destination, function (json) {
+    getDirections(req.query.origin, req.query.destination, req.query.departure_time, function (json) {
         res.json({routes: json});
     });
 });
@@ -13,12 +13,14 @@ const googleMapsClient = require('@google/maps').createClient({
     key: process.env.WEBAPPS_GMAPS_KEY
 });
 
-function getDirections(origin, destination, callback) {
+function getDirections(origin, destination, departure_time, callback) {
     googleMapsClient.directions({
-        origin: origin,
-        destination: destination,
+        origin: origin + ' London',
+        destination: destination + ' London',
         mode: 'transit',
+        departure_time: departure_time,
         alternatives: true
+        
     }, function (err, response) {
         if (!err) {
             getAccessibility(function (allStations) {
