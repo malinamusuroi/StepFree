@@ -80,21 +80,90 @@ export default class Routes extends Component{
         if (json.lineDetails.vehicle === 'SUBWAY') {
           return <View style = {{flexDirection:'row'}}>
                    <Image source ={require('./icon.jpg')} style = {styles.subway}/>
-                   <Text style = {styles.text2} > {json.lineDetails.lineType} </Text>
+                   <View style = {{width: this.getLength(json.lineDetails.lineType), marginTop: 6, height: 20, alignItems: 'center', backgroundColor: this.getColor(json.lineDetails.lineType)}}>
+                      <Text style = {{color: this.getStationColor(json.lineDetails.lineType)}}> {json.lineDetails.lineType} </Text>
+                   </View>
                     {arrow}
                  </View>
       } else {
          const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/>
           return <View style = {{flexDirection: 'row'}}>
                    <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
-                   <Text style = {styles.text2}> ({json.lineDetails.number}) </Text>
-                   {arrow}
+                   <Text> </Text>
+                   <View style = {{backgroundColor: '#E32017', width: 33, height: 19, alignItems: 'center', marginTop: 8}}>
+                     <Text style = {{color: 'white', fontSize: 15}}> {json.lineDetails.number} </Text>
+                   </View> 
+                  {arrow}
                 </View>
       } 
    }
    return null;
  }
 
+ getColor(station) {
+   switch(station) {
+      case 'Piccadilly':
+         return '#003688'
+         break;
+      case 'Circle':
+         return '#FFD300'
+         break;
+     case 'Central':
+         return '#E32017'
+         break;
+    case 'Bakerloo':
+        return '#B36305'
+        break;
+     case 'District':
+        return '#00782A'
+        break;
+     case 'Northern':
+        return '#1D2828'
+        break;
+    case 'Victoria':
+        return '#0098D4'
+        break;
+    case 'Jubilee':
+        return '#A0A5A9'
+        break;
+    case 'Waterloo and City':
+        return '#95CDBA'
+        break;
+    case 'Hammersmith & City':
+        return '#F3A9BB'
+        break;
+    case 'Metropolitan':
+        return '9B0056'
+        break;
+   }
+ }
+
+ getStationColor(station) {
+   switch(station) {
+     case 'Northern':
+     case'Piccadilly':
+     case 'District':
+     case 'Central':
+     case 'Bakerloo':
+       return 'white'
+       break;
+     default:
+       return 'black'
+       break;
+   }
+ }
+
+ getLength(station) {
+   switch(station) {
+     case 'Hammersmith & City':
+     case 'Waterloo and City':
+       return 137
+       break;
+     default: 
+       return 65
+       break;
+   }
+ }
  printStepFree(info) {
 	 if (info.charAt(0) === 'N') {
 	   return '❌' + info;
@@ -118,13 +187,13 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   text2: {
-    fontSize: 16,
-    color: 'black',
-    marginTop: 2
+    fontSize: 21,
+    color: 'white',
+    marginTop: 3
   },
   subway: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 3
@@ -151,16 +220,16 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   bus: {
-    width: 25,
+    width: 34,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 18,
+    height: 25,
     marginTop: 3
   },
   text: {
     marginLeft: 2,
     margin: 0,
-    fontSize: 18,
+    fontSize: 17,
     textAlign: 'left',
     marginBottom: 0
   },
