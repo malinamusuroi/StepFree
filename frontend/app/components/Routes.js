@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  InlineImage,
 	FlatList,
 	TouchableOpacity
 } from 'react-native';
@@ -29,8 +30,9 @@ export default class Routes extends Component{
 
     const { navigate } =  this.props.navigation;
     const routes = this.props.navigation.state.params.routes;
-	  const routes2 = this.props.navigation.state.params.routes2
-     
+	  const routes2 = this.props.navigation.state.params.routes2;
+    const json = this.props.navigation.state.params.json 
+
    return (
     <View style = {styles.container}>
       <Image source = {require('./background2.jpeg')}
@@ -38,19 +40,136 @@ export default class Routes extends Component{
       </Image>
 
       <FlatList 
-        data={routes} 
+        data={json.routes} 
         keyExtractor={(r, i) => i + ''}
 				renderItem={({item, index}) =>  
 			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
-					<View style={styles.button}>
-            <Text style= {styles.text}>{item}</Text>
-          </View> 
-         </TouchableOpacity>
+			  <View style={styles.button}>
+           <View>
+              <Text style = {styles.text}>{this.getSteps(item)} </Text>
+           </View>
+           <Text style = {styles.text}> Duration: {item.duration} </Text>
+           <Text style = {styles.text}> {this.printStepFree(item.accessibility)}</Text>
+        </View> 
+        </TouchableOpacity>
         }
       />
     </View>
-    );
+    );   
+ }
+
+ getSteps(route) {
+    const steps = route.steps
+    const info = this.getInfo(steps)
+    return info;
+ }
+ 
+ getInfo(steps) {
+   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1));
+ }
+
+ getRoute(json, isLast) {
+   if (json.travelMode === 'WALKING') {
+     const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
+     return <View style = {{flexDirection:'row'}}> 
+              <Image source = {require('./wheel.png')} style = {styles.wheel}/>
+              {arrow}
+           </View>
+   } else if (json.travelMode === 'TRANSIT') {
+      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/> 
+        if (json.lineDetails.vehicle === 'SUBWAY') {
+          return <View style = {{flexDirection:'row'}}>
+                   <Image source ={require('./icon.jpg')} style = {styles.subway}/>
+                   <View style = {{width: this.getLength(json.lineDetails.lineType), marginTop: 6, height: 20, alignItems: 'center', backgroundColor: this.getColor(json.lineDetails.lineType)}}>
+                      <Text style = {{color: this.getStationColor(json.lineDetails.lineType)}}> {json.lineDetails.lineType} </Text>
+                   </View>
+                    {arrow}
+                 </View>
+      } else {
+         const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/>
+          return <View style = {{flexDirection: 'row'}}>
+                   <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
+                   <Text> </Text>
+                   <View style = {{backgroundColor: '#E32017', width: 33, height: 19, alignItems: 'center', marginTop: 8}}>
+                     <Text style = {{color: 'white', fontSize: 15}}> {json.lineDetails.number} </Text>
+                   </View> 
+                  {arrow}
+                </View>
+      } 
    }
+   return null;
+ }
+
+ getColor(station) {
+   switch(station) {
+      case 'Piccadilly':
+         return '#003688'
+         break;
+      case 'Circle':
+         return '#FFD300'
+         break;
+     case 'Central':
+         return '#E32017'
+         break;
+    case 'Bakerloo':
+        return '#B36305'
+        break;
+     case 'District':
+        return '#00782A'
+        break;
+     case 'Northern':
+        return '#1D2828'
+        break;
+    case 'Victoria':
+        return '#0098D4'
+        break;
+    case 'Jubilee':
+        return '#A0A5A9'
+        break;
+    case 'Waterloo and City':
+        return '#95CDBA'
+        break;
+    case 'Hammersmith & City':
+        return '#F3A9BB'
+        break;
+    case 'Metropolitan':
+        return '9B0056'
+        break;
+   }
+ }
+
+ getStationColor(station) {
+   switch(station) {
+     case 'Northern':
+     case'Piccadilly':
+     case 'District':
+     case 'Central':
+     case 'Bakerloo':
+       return 'white'
+       break;
+     default:
+       return 'black'
+       break;
+   }
+ }
+
+ getLength(station) {
+   switch(station) {
+     case 'Hammersmith & City':
+     case 'Waterloo and City':
+       return 137
+       break;
+     default: 
+       return 65
+       break;
+   }
+ }
+ printStepFree(info) {
+	 if (info.charAt(0) === 'N') {
+	   return '❌' + info;
+	 }
+	 return '✅'  + info;
+ }
 }
 
 const styles = StyleSheet.create({
@@ -67,11 +186,52 @@ const styles = StyleSheet.create({
     position: 'absolute',
     resizeMode: 'cover'
   },
+  text2: {
+    fontSize: 21,
+    color: 'white',
+    marginTop: 3
+  },
+  subway: {
+    width: 25,
+    height: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 3
+ },
+  wheel: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -2
+  },
+  arrow: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -1
+  },
+  arrow2: {
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4
+  },
+  bus: {
+    width: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 25,
+    marginTop: 3
+  },
   text: {
     marginLeft: 2,
-    margin: 8,
-    fontSize: 20,
-    textAlign: 'left'
+    margin: 0,
+    fontSize: 17,
+    textAlign: 'left',
+    marginBottom: 0
   },
   button: {
     borderWidth: 1,
@@ -81,7 +241,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
     borderColor: 'black',
     marginBottom: 10,
-	  width: 340,
+	  width: 360,
     backgroundColor: 'white'
   },
   touchable: {

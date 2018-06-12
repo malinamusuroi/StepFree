@@ -17,7 +17,7 @@ export default class Main extends Component {
     this.state = {
       FROMtext: '',
       TOtext: '',
-      result: '',
+      json: '',
       result2: ' ',
     };
   }
@@ -58,33 +58,23 @@ export default class Main extends Component {
  search(nav) {
   const origin1 = encodeURIComponent(this.state.FROMtext);
   const destination1 = encodeURIComponent(this.state.TOtext);
-  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
-  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
+//  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
   .then((response) => response.json())
   .then((responseJson) => {
-     console.log(responseJson)
-     var steps = responseJson.routes.map (route => {
-      const steps = route.steps
-      const info = this.getInfo(steps)
-      const array = this.printArray(info)
-      return array;
-    })
-     
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
       return steps;
     })
 
-     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + '\n Duration: ' + x.duration +
-						                                                                        '\n' + this.printStepFree(x.accessibility)));   
      this.setState({
-        result: steps,
-        result2: array
+        result2: array,
+        json: responseJson
      })
-     nav('Routes', {routes: this.state.result, routes2: this.state.result2})
-    })
-    .catch(function(error) {
+     nav('Routes', {json: this.state.json, routes2: this.state.result2})
+     })
+     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)
     });
   } 
@@ -93,42 +83,8 @@ export default class Main extends Component {
    if (json.lineDetails == null) {
      return ' ';
    } else {
-     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop
-               + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
+     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
    }
- }
-
- getInfo(steps) {
-   return steps.map(step => this.getRoute(step));
- }
-
- getRoute(json) {
-   var str = '';
-   if (json.travelMode === 'WALKING') {
-      str = str + '♿︎' + json.durationOfStep + ' -> ';
-   } else if (json.travelMode === 'TRANSIT') {
-      if (json.lineDetails.vehicle === 'SUBWAY') {
-         str += '🚊' + ' ' + json.lineDetails.lineType + ' -> ';
-      } else {
-         str += '🚌' + ' ' + json.lineDetails.number + ' -> ';
-      }
-   }
-  return str;
- }
-
- printStepFree(info) {
-	 if (info.charAt(0) === 'N') {
-	   return '❌' + info;
-	 }
-	 return '✅'  + info;
- }
-
- printArray(array) {
-  var str = '';
-  for (var i = 0;i < array.length; i++) {
-    str += array[i];
-  }
-   return str.substring(0, str.length - 4);
  }
 
 }
