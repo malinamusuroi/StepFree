@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import {
   StyleSheet,
   Text,
@@ -7,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  View
+  View,
+	Alert
  } from 'react-native';
 
 
@@ -19,8 +21,23 @@ export default class Main extends Component {
       TOtext: '',
       result: '',
       result2: ' ',
+			isTimePickerVisible: false,
+			departureTime: '',
+	    departureText: 'Now' 
     };
   }
+	
+	
+
+  showDateTimePicker = () => this.setState({ isTimePickerVisible: true });
+ 
+  hideDateTimePicker = () => this.setState({ isTimePickerVisible: false });
+ 
+  handleDatePicked = (date) => {
+		this.setState({ departureTime: date.getTime()/1000 });
+		this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
+		this.hideDateTimePicker();
+	};
 
  render() {
 
@@ -33,14 +50,18 @@ export default class Main extends Component {
       </Image>
 
       <View style={styles.header}>
-        <Text style={styles.headerText}>EMPOWER </Text>
+        <Text style={styles.headerText}>EMPOWER</Text>
       </View>
 
       <View style = {styles.header}>
         <Text style={styles.headerText2}>MOVEMENT</Text>
       </View>
 
-     <TextInput style={styles.FROMtext}
+			<TouchableOpacity onPress={this.showDateTimePicker}  style = {styles.timePickButton}>
+	      <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
+	    </TouchableOpacity>
+
+      <TextInput style={styles.FROMtext}
         placeholder="Enter Start"
         onChangeText = {(FROMtext)=>this.setState({FROMtext})}/>
 
@@ -49,17 +70,26 @@ export default class Main extends Component {
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
-        <Text style = {styles.findButtonText}>FIND ROUTE♿︎</Text>
+        <Text style = {styles.findButtonText}> FIND ROUTE ♿︎</Text>
       </TouchableOpacity>
+	
+			<DateTimePicker
+	      isVisible={this.state.isTimePickerVisible}
+	      onConfirm={this.handleDatePicked}
+	      onCancel={this.hideDateTimePicker}
+				mode= 'datetime'
+				titleIOS= 'Pick a departure time'
+	    />
 
-    </View>
+		</View>
   )};
 
  search(nav) {
   const origin1 = encodeURIComponent(this.state.FROMtext);
   const destination1 = encodeURIComponent(this.state.TOtext);
-  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
-  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
+	const departureTime1 = encodeURIComponent(this.state.departureTime);
+  //fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+  fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
      console.log(responseJson)
@@ -217,4 +247,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24
   },
+	timePickButton: {
+	  backgroundColor: 'rgba(52, 52, 52, 0.3)',
+		width: 350,
+		height: 35,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+		alignSelf: 'flex-start',
+    start: 10,
+	},
+	timePickButtonText: {
+    fontSize: 15,
+		paddingLeft: 10
+	},
 });
