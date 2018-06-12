@@ -46,7 +46,7 @@ export default class Routes extends Component{
 			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
            <View>
-              <View style = {{width: 30, flexDirection: 'row'}}>{this.getSteps(item)}</View>
+              <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap'}}>{this.getSteps(item)}</View>
            </View>
            <Text style = {styles.text}> Duration: {item.duration} </Text>
            <Text style = {styles.text}> {this.printStepFree(item.accessibility)} </Text>
