@@ -51,15 +51,15 @@ export default class Main extends Component {
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
         <Text style = {styles.findButtonText}>FIND ROUTE♿︎</Text>
       </TouchableOpacity>
-
+ 
     </View>
   )};
 
  search(nav) {
   const origin1 = encodeURIComponent(this.state.FROMtext);
   const destination1 = encodeURIComponent(this.state.TOtext);
-//  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
-   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
+ fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1)    
+//   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1)
   .then((response) => response.json())
   .then((responseJson) => {
     var array =  responseJson.routes.map(route => {
@@ -72,6 +72,7 @@ export default class Main extends Component {
         result2: array,
         json: responseJson
      })
+
      nav('Routes', {json: this.state.json, routes2: this.state.result2})
      })
      .catch(function(error) {
