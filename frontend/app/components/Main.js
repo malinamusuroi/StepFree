@@ -19,25 +19,13 @@ export default class Main extends Component {
     this.state = {
       FROMtext: '',
       TOtext: '',
-      result: '',
+      json: '',
       result2: ' ',
 			isTimePickerVisible: false,
 			departureTime: '',
 	    departureText: 'Now' 
     };
   }
-	
-	
-
-  showDateTimePicker = () => this.setState({ isTimePickerVisible: true });
- 
-  hideDateTimePicker = () => this.setState({ isTimePickerVisible: false });
- 
-  handleDatePicked = (date) => {
-		this.setState({ departureTime: date.getTime()/1000 });
-		this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
-		this.hideDateTimePicker();
-	};
 
  render() {
 
@@ -92,73 +80,41 @@ export default class Main extends Component {
   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
-     console.log(responseJson)
-     var steps = responseJson.routes.map (route => {
-      const steps = route.steps
-      const info = this.getInfo(steps)
-      const array = this.printArray(info)
-      return array;
-    })
-     
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
       return steps;
     })
 
-     steps = responseJson.routes.map(x => (steps[responseJson.routes.indexOf(x)] + '\n Duration: ' + x.duration +
-						                                                                        '\n' + this.printStepFree(x.accessibility)));   
      this.setState({
-        result: steps,
-        result2: array
+        result2: array,
+        json: responseJson
      })
-     nav('Routes', {routes: this.state.result, routes2: this.state.result2})
-    })
-    .catch(function(error) {
+
+     nav('Routes', {json: this.state.json, routes2: this.state.result2})
+     })
+     .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)
     });
   } 
+
+ showDateTimePicker = () => this.setState({ isTimePickerVisible: true });
+
+ hideDateTimePicker = () => this.setState({ isTimePickerVisible: false });
+
+ handleDatePicked = (date) => {
+	this.setState({ departureTime: date.getTime()/1000 });
+	this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
+	this.hideDateTimePicker();
+ };
+
 
  getLineDetails(json) {
    if (json.lineDetails == null) {
      return ' ';
    } else {
-     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop
-               + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
+     return ('\n  Departure Stop: ' + json.lineDetails.departureStop + '\n  Arrival Stop: ' + json.lineDetails.arrivalStop + '\n  Number of stops: ' + json.lineDetails.numberOfStops) ;
    }
- }
-
- getInfo(steps) {
-   return steps.map(step => this.getRoute(step));
- }
-
- getRoute(json) {
-   var str = '';
-   if (json.travelMode === 'WALKING') {
-      str = str + '♿︎' + json.durationOfStep + ' -> ';
-   } else if (json.travelMode === 'TRANSIT') {
-      if (json.lineDetails.vehicle === 'SUBWAY') {
-         str += '🚊' + ' ' + json.lineDetails.lineType + ' -> ';
-      } else {
-         str += '🚌' + ' ' + json.lineDetails.number + ' -> ';
-      }
-   }
-  return str;
- }
-
- printStepFree(info) {
-	 if (info.charAt(0) === 'N') {
-	   return '❌' + info;
-	 }
-	 return '✅'  + info;
- }
-
- printArray(array) {
-  var str = '';
-  for (var i = 0;i < array.length; i++) {
-    str += array[i];
-  }
-   return str.substring(0, str.length - 4);
  }
 
 }
