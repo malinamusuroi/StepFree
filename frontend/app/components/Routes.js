@@ -40,11 +40,9 @@ export default class Routes extends Component{
 				renderItem={({item, index}) =>  
 			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index]})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
-           <View>
-              <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap'}}>{this.getSteps(item)}</View>
-           </View>
-           <Text style = {styles.text}> Duration: {item.duration} </Text>
-           <Text style = {styles.text}> {this.printStepFree(item.accessibility)} </Text>
+          <Text style = {{color:'black', fontSize: 18, marginBottom: 7, marginTop: 4}}> {item.departureTime} - {item.arrivalTime}                            {item.duration} </Text>
+          <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap', marginBottom: 7, marginLeft: 8}}>{this.getSteps(item)}</View>
+          <Text style = {styles.text}> {this.printStepFree(item.accessibility)} </Text>
         </View> 
         </TouchableOpacity>
         }
@@ -66,12 +64,12 @@ export default class Routes extends Component{
  getRoute(json, isLast) {
    if (json.travelMode === 'WALKING') {
      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
-     return <View style = {{flexDirection:'row'}}> 
+     return  <View style = {{flexDirection:'row'}}> 
               <Image source = {require('./wheel.png')} style = {styles.wheel}/>
               {arrow}
            </View>
    } else if (json.travelMode === 'TRANSIT') {
-      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/> 
+      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/> 
         if (json.lineDetails.vehicle === 'SUBWAY') {
           return <View style = {{flexDirection:'row'}}>
                    <Image source ={require('./icon.jpg')} style = {styles.subway}/>
@@ -81,7 +79,7 @@ export default class Routes extends Component{
                     {arrow}
                  </View>
       } else {
-         const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow2}/>
+         const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
           return <View style = {{flexDirection: 'row'}}>
                    <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
                    <Text> </Text>
@@ -128,7 +126,7 @@ export default class Routes extends Component{
         return '#F3A9BB'
         break;
     case 'Metropolitan':
-        return '9B0056'
+        return '#9B0056'
         break;
    }
  }
@@ -140,6 +138,7 @@ export default class Routes extends Component{
      case 'District':
      case 'Central':
      case 'Bakerloo':
+     case 'Metropolitan':
        return 'white'
        break;
      default:
@@ -154,8 +153,15 @@ export default class Routes extends Component{
      case 'Waterloo and City':
        return 137
        break;
+     case 'Metropolitan':
+       return 100
+       break;
+     case 'Piccadilly':
+     case 'Northern':
+       return 85
+       break;
      default: 
-       return 65
+       return 60
        break;
    }
  }
@@ -198,14 +204,14 @@ const styles = StyleSheet.create({
     height: 17,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -2
+    marginTop: 6,
   },
   arrow: {
     width: 17,
     height: 17,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -1
+    marginTop: 4
   },
   arrow2: {
     width: 17,
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
     margin: 0,
     fontSize: 17,
     textAlign: 'left',
-    marginBottom: 0
+    marginBottom: 5
   },
   button: {
     borderWidth: 1,
