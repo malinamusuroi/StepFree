@@ -46,27 +46,29 @@ export default class Main extends Component {
         <Text style={styles.headerText2}>MOVEMENT</Text>
       </View>
 
-    <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
-      <Image source = {require('./loc.png')} style = {{width: 25, height: 25, marginTop: 6, marginLeft: 20}}/>
-    </TouchableOpacity>
-
+    <View style = {{flexDirection: 'row'}}>
       <TouchableOpacity onPress={this.displayTimePicker}  style = {styles.timePickButton}>
         <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
+    </TouchableOpacity>
+
+      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 15, alignSelf: 'flex-end', marginRight: 25, marginLeft: 120}}>
+         <Text> Clear </Text>
       </TouchableOpacity>
+     </View>
 
       <TextInput style={styles.FROMtext}
         placeholder="Enter Start"
         value={this.state.useCurrentLocation ? "Using Current Location" : this.state.FROMtext}
         onChangeText = {(FROMtext)=>this.setState({FROMtext: FROMtext, useCurrentLocation: false})}/>
 
+     <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
+      <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, height: 25, marginLeft: 325, marginTop: -47}}/>
+    </TouchableOpacity>
+
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
         value={this.state.TOtext}
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
-
-      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 20}}>
-         <Text> Clear </Text>
-      </TouchableOpacity>
 
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
         <Text style = {styles.findButtonText}> FIND ROUTE ♿︎</Text>
@@ -135,7 +137,6 @@ export default class Main extends Component {
    this.hideTimePicker();
  };
 
-
  getLineDetails(json) {
    if (json.lineDetails == null) {
      return ' ';
@@ -146,7 +147,6 @@ export default class Main extends Component {
              '\n  Line: ' + json.lineDetails.lineType) 
    }
  }
-
 }
 
 const styles = StyleSheet.create({
@@ -242,10 +242,11 @@ const styles = StyleSheet.create({
     width: 190,
     height: 35,
     borderRadius: 30,
+    marginTop: 23,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    start: 10,
+    start: 10
   },
   timePickButtonText: {
     fontSize: 15,
