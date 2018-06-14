@@ -10,16 +10,22 @@ import {
   FlatList
 } from 'react-native';
 
-
 export default class RouteInfo extends Component{
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      route:''
+    };
+  }
+
   static navigationOptions = {
     title: 'Route Details'
   };
 
   render() {
     const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.routes2
+    const routes = this.props.navigation.state.params.routes2;
+    const rout = this.props.navigation.state.params.routes
 
     return(
       <View style = {styles.container}>
@@ -34,15 +40,13 @@ export default class RouteInfo extends Component{
             <View style = {styles.stepView}>{this.displayByMode(item)}</View>}
         />
 
-        <TouchableOpacity onPress={this.pressed()} style={styles.infoButton}>
+        <TouchableOpacity onPress={() => navigate('Access', {route: rout})} style={styles.infoButton}>
           <Text style={styles.buttonText}> Get Accessibility Information ♿︎ </Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  pressed() {
-  }
 
   displayByMode(item) {
     if (item.split('\n')[0].split(' ')[0] == "TRANSIT") {

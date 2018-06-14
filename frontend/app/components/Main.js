@@ -61,7 +61,12 @@ export default class Main extends Component {
 
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
+        value={this.state.TOtext}
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
+
+      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'clear', height: 20}}>
+         <Text> Clear </Text>
+      </TouchableOpacity>
 
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
         <Text style = {styles.findButtonText}> FIND ROUTE ♿︎</Text>
@@ -88,19 +93,27 @@ export default class Main extends Component {
     })
   }
 
+  clear() {
+    this.setState({
+      useCurrentLocation: false,
+      FROMtext: '',
+      TOtext: '',
+    });
+  }
 
  search(nav) {
-  const origin1 = encodeURIComponent(this.state.FROMtext);
-  const destination1 = encodeURIComponent(this.state.TOtext);
+  const londonText = this.state.useCurrentLocation ? '' : ', London';
+  const origin1 = encodeURIComponent(this.state.FROMtext + londonText);
+  const destination1 = encodeURIComponent(this.state.TOtext + ', London');
   const departureTime1 = encodeURIComponent(this.state.departureTime);
- // fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
-  fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
+  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
+  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
-      return steps;
+      return steps
     })
 
     this.setState({
@@ -225,7 +238,7 @@ const styles = StyleSheet.create({
   },
   timePickButton: {
     backgroundColor: 'rgba(52, 52, 52, 0.3)',
-    width: 350,
+    width: 190,
     height: 35,
     borderRadius: 30,
     alignItems: 'center',
