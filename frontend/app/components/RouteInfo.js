@@ -62,20 +62,18 @@ export default class RouteInfo extends Component{
   getBetweenImg(item) {
     if (item.split('\n')[0].split(' ')[0] == "TRANSIT") {
       const instruction = "\n" + item.split('\n')[1].trim() + "\n";
-			const mins = item.split('\n')[0].split('-')[1];
-			const numStops = item.split('\n')[4].split(":")[1].trim() + " stops (" + mins.trim() + ")" ;
-			const line = item.split('\n')[5].split(":")[1].trim();
-			return  <View style={styles.transitView}>
-						  	 <View style={styles.image}>
+      const mins = item.split('\n')[0].split('-')[1];
+      const numStops = item.split('\n')[4].split(":")[1].trim() + " stops (" + mins.trim() + ")" ;
+      const line = item.split('\n')[5].split(":")[1].trim();
+      return  <View style={styles.transitView}>
+                <View style={styles.image}>
                   {this.getLine(line)} 
-						  	 <Text style={styles.lineText}>
+                  <Text style={styles.lineText}>
                       Central Line 
                       {instruction} 
-						          {numStops}
-								 </Text>
-					       <Text style={styles.towardsText}>
-										</Text>
-					        </View>
+                      {numStops}
+                  </Text>
+                </View>
              </View>
     }
       return '';
@@ -96,33 +94,34 @@ export default class RouteInfo extends Component{
 
   getLine(name) {
     switch(name) {
-	    case "Central":
-    	  return <Image source = {require('./central.png')} style = {styles.line}/>
-	    case "Piccadilly":
+      case "Central":
+        return <Image source = {require('./central.png')} style = {styles.line}/>
+      case "Piccadilly":
         return <Image source = {require('./picadilly.png')} style = {styles.line}/>
-			case "Bakerloo":
+      case "Bakerloo":
         return <Image source = {require('./bakerloo.png')} style = {styles.line}/>
-			case "Jubilee":
+      case "Jubilee":
         return <Image source = {require('./jubilee.png')} style = {styles.line}/>
-			case "District":
+      case "District":
         return <Image source = {require('./district.png')} style = {styles.line}/>
-			case "Circle":
+      case "Circle":
         return <Image source = {require('./circle.png')} style = {styles.line}/>
-			case "Metropolitan":
+      case "Metropolitan":
         return <Image source = {require('./metropolitan.png')} style = {styles.line}/>
-			case "Northern":
+      case "Northern":
         return <Image source = {require('./northern.png')} style = {styles.line}/>
-			case "Hammersmith & City":
+      case "Hammersmith & City":
         return <Image source = {require('./hammersmith.png')} style = {styles.line}/>
-			case "Waterloo & City":
+      case "Waterloo & City":
         return <Image source = {require('./waterloo.png')} style = {styles.line}/>
-			case "Victoria" :
+      case "Victoria" :
         return <Image source = {require('./victoria.png')} style = {styles.line}/>
       default : 
-			  return <Image source = {require('./bus.png')} style = {styles.line}/>
-		} 
+        return <Image source = {require('./bus.png')} style = {styles.line}/>
+    } 
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -152,7 +151,6 @@ const styles = StyleSheet.create({
   },
   infoButton: {
     backgroundColor: 'rgba(52, 52, 52, 0.5)',
-    //backgroundColor: '#21abcd',
     borderColor: 'grey',
     width: 350,
     height: 35,
@@ -183,16 +181,14 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   lineText: {
-		//backgroundColor: 'grey', 
-		marginTop: 2,
-		marginLeft: 15,
-		fontSize: 14
+    marginTop: 2,
+    marginLeft: 15,
+    fontSize: 14
+  },	
+  image: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginLeft: 3.5,
+    flexDirection: 'row',
   },
-	image: {
-		//backgroundColor: 'black',
-		alignSelf: 'center',
-		justifyContent: 'center',
-	  marginLeft: 3.5,
-		flexDirection: 'row',
-	},
 });
