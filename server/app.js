@@ -14,9 +14,10 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 function getDirections(origin, destination, departure_time, callback) {
+    console.log(origin, destination);
     googleMapsClient.directions({
-        origin: origin + ' London',
-        destination: destination + ' London',
+        origin: origin,
+        destination: destination,
         mode: 'transit',
         departure_time: departure_time,
         alternatives: true
