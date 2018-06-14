@@ -36,7 +36,6 @@ function getDirections(origin, destination, departure_time, callback) {
                         departureTime: departureTime,
                         arrivalTime: arrivalTime,
                         steps: accessSteps,
-                        // access: allStations.filter((station) => inArray(usedStations(route.legs), station.stationName)),
                         accessibility: '' + isStepFree(allStations.filter((station) => inArray(usedStations(route.legs),
                             station.stationName)))
                     };
@@ -77,7 +76,7 @@ function getAccess(stop, lineType, accessInfo) {
     return access.map(a => {
         return {
             lift: a.lift,
-            lineInfo: a.lineInfo.filter(x => x.lineName === lineType)
+            lineInfo: (a.lineInfo || []).filter(x => x.lineName === lineType)
         }
     })
 }

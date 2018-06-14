@@ -100,7 +100,7 @@ export default class Main extends Component {
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
-      return steps;
+      return steps
     })
 
     this.setState({
