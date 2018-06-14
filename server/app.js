@@ -25,11 +25,18 @@ function getDirections(origin, destination, departure_time, callback) {
         if (!err) {
             getAccessibility(function (allStations) {
                 callback(response.json.routes.map(function (route) {
+                    const duration = route.legs[0].duration.text;
+                    const departureTime = route.legs[0].departure_time.text;
+                    const arrivalTime = route.legs[0].arrival_time.text;
+                    const steps = getSteps(route.legs[0]);
+                    const accessSteps = fillAccessibility(steps, allStations);
+
                     return {
-                        duration: route.legs[0].duration.text,
-                        departureTime: route.legs[0].departure_time.text,
-                        arrivalTime: route.legs[0].arrival_time.text,
-                        steps: getSteps(route.legs[0]),
+                        duration: duration,
+                        departureTime: departureTime,
+                        arrivalTime: arrivalTime,
+                        steps: accessSteps,
+                        // access: allStations.filter((station) => inArray(usedStations(route.legs), station.stationName)),
                         accessibility: '' + isStepFree(allStations.filter((station) => inArray(usedStations(route.legs),
                             station.stationName)))
                     };
@@ -38,6 +45,39 @@ function getDirections(origin, destination, departure_time, callback) {
             })
         } else {
             console.error(err);
+        }
+    })
+}
+
+function fillAccessibility(steps, accessInfo) {
+    return steps.map((step) => {
+        if (step.travelMode === "TRANSIT") {
+            let lineDetails = step.lineDetails;
+            lineDetails.departureAccess = getAccess(lineDetails.departureStop, lineDetails.lineType, accessInfo);
+            lineDetails.arrivalAccess = getAccess(lineDetails.arrivalStop, lineDetails.lineType, accessInfo);
+            step.lineDetails = lineDetails;
+            return step;
+        } else {
+            return step;
+        }
+    })
+}
+
+function stationIsEqual(s1, s2) {
+    s1.replace(" London Underground Station", "");
+    s1.replace(" Station", "");
+    s2.replace(" London Underground Station", "");
+    s2.replace(" Station", "");
+    return s1 == s2;
+}
+
+function getAccess(stop, lineType, accessInfo) {
+    const access = accessInfo.filter(x => stationIsEqual(x.stationName, stop));
+    console.log(access);
+    return access.map(a => {
+        return {
+            lift: a.lift,
+            lineInfo: a.lineInfo.filter(x => x.lineName === lineType)
         }
     })
 }
