@@ -4,23 +4,31 @@ import {
   Text,
   Image,
   ScrollView,
+  TouchableOpacity,
   View
 } from 'react-native';
 
 
 export default class RouteInfo extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      route:''
+    };
+  }
   render() {
   	const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.routes2
+    const routes = this.props.navigation.state.params.routes2;
+    const rout = this.props.navigation.state.params.routes
 
    return(
  	    <View style = {styles.container}>
   	  	   <Image source = {require('./background2.jpeg')}
              style = {styles.background}>
            </Image>
-        <View style = {styles.button}>
+        <TouchableOpacity onPress = {() => navigate('Access', {route: rout})} style = {styles.button}>
             <Text style = {styles.text}> {routes.join("\n\n")} </Text>
-        </View>
+        </TouchableOpacity>
   	  </View>
   	);
   }

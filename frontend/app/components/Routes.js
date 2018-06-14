@@ -22,16 +22,11 @@ export default class Routes extends Component{
     title: 'Routes'
   };
 
-   _onPressButton() {
-  
-	 } 
-
 	 render() {
 
     const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.routes;
 	  const routes2 = this.props.navigation.state.params.routes2;
-    const json = this.props.navigation.state.params.json 
+    const json = this.props.navigation.state.params.json
 
    return (
     <View style = {styles.container}>
@@ -43,7 +38,7 @@ export default class Routes extends Component{
         data={json.routes} 
         keyExtractor={(r, i) => i + ''}
 				renderItem={({item, index}) =>  
-			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index]})} underlayColor="white" style={styles.touchable}>
+			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index]})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
            <View>
               <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap'}}>{this.getSteps(item)}</View>
