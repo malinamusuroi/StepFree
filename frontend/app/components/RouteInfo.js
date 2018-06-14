@@ -64,10 +64,10 @@ export default class RouteInfo extends Component{
       const instruction = "\n" + item.split('\n')[1].trim() + "\n";
 			const mins = item.split('\n')[0].split('-')[1];
 			const numStops = item.split('\n')[4].split(":")[1].trim() + " stops (" + mins.trim() + ")" ;
+			const line = item.split('\n')[5].split(":")[1].trim();
 			return  <View style={styles.transitView}>
 						  	 <View style={styles.image}>
-                   <Image source = {require()} style = {styles.line}/>
-                 
+                  {this.getLine(line)} 
 						  	 <Text style={styles.lineText}>
                       Central Line 
                       {instruction} 
@@ -98,7 +98,7 @@ export default class RouteInfo extends Component{
     switch(name) {
 	    case "Central":
     	  return <Image source = {require('./central.png')} style = {styles.line}/>
-	    case "Picadilly":
+	    case "Piccadilly":
         return <Image source = {require('./picadilly.png')} style = {styles.line}/>
 			case "Bakerloo":
         return <Image source = {require('./bakerloo.png')} style = {styles.line}/>
@@ -118,15 +118,11 @@ export default class RouteInfo extends Component{
         return <Image source = {require('./waterloo.png')} style = {styles.line}/>
 			case "Victoria" :
         return <Image source = {require('./victoria.png')} style = {styles.line}/>
-
+      default : 
+			  return <Image source = {require('./bus.png')} style = {styles.line}/>
 		} 
   }
-  
-
-	
-
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -190,6 +186,7 @@ const styles = StyleSheet.create({
 		//backgroundColor: 'grey', 
 		marginTop: 2,
 		marginLeft: 15,
+		fontSize: 14
   },
 	image: {
 		//backgroundColor: 'black',
