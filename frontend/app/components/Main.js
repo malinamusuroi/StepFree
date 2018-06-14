@@ -64,7 +64,7 @@ export default class Main extends Component {
         value={this.state.TOtext}
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
-      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'clear', height: 20}}>
+      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 20}}>
          <Text> Clear </Text>
       </TouchableOpacity>
 
@@ -142,7 +142,8 @@ export default class Main extends Component {
    } else {
      return ('\n  Departure Stop: ' + json.lineDetails.departureStop + 
              '\n  Arrival Stop: ' + json.lineDetails.arrivalStop + 
-             '\n  Number of stops: ' + json.lineDetails.numberOfStops);
+             '\n  Number of stops: ' + json.lineDetails.numberOfStops +
+             '\n  Line: ' + json.lineDetails.lineType) 
    }
  }
 
