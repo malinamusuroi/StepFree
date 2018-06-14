@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Dash from 'react-native-dash';
 import {
   StyleSheet,
   Text,
