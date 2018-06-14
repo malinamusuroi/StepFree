@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Dash from 'react-native-dash';
 import {
   StyleSheet,
   Text,
@@ -62,13 +61,22 @@ export default class RouteInfo extends Component{
 
   getBetweenImg(item) {
     if (item.split('\n')[0].split(' ')[0] == "TRANSIT") {
-      const instruction = item.split('\n')[1];
-      //TODO : get the correct line picture
-      return <Text style={styles.lineText}>
-                <Image source = {require('./central.png')} style = {styles.line}/>
-                 Central Line 
-                 {instruction}
-             </Text>
+      const instruction = "\n" + item.split('\n')[1].trim() + "\n";
+			const mins = item.split('\n')[0].split('-')[1];
+			const numStops = item.split('\n')[4].split(":")[1].trim() + " stops (" + mins.trim() + ")" ;
+			return  <View style={styles.transitView}>
+						  	 <View style={styles.image}>
+                   <Image source = {require()} style = {styles.line}/>
+                 
+						  	 <Text style={styles.lineText}>
+                      Central Line 
+                      {instruction} 
+						          {numStops}
+								 </Text>
+					       <Text style={styles.towardsText}>
+										</Text>
+					        </View>
+             </View>
     }
       return '';
   }
@@ -87,8 +95,35 @@ export default class RouteInfo extends Component{
   }
 
   getLine(name) {
-    return "./" + name.split(' ')[0].toLowerCase() + ".png"
+    switch(name) {
+	    case "Central":
+    	  return <Image source = {require('./central.png')} style = {styles.line}/>
+	    case "Picadilly":
+        return <Image source = {require('./picadilly.png')} style = {styles.line}/>
+			case "Bakerloo":
+        return <Image source = {require('./bakerloo.png')} style = {styles.line}/>
+			case "Jubilee":
+        return <Image source = {require('./jubilee.png')} style = {styles.line}/>
+			case "District":
+        return <Image source = {require('./district.png')} style = {styles.line}/>
+			case "Circle":
+        return <Image source = {require('./circle.png')} style = {styles.line}/>
+			case "Metropolitan":
+        return <Image source = {require('./metropolitan.png')} style = {styles.line}/>
+			case "Northern":
+        return <Image source = {require('./northern.png')} style = {styles.line}/>
+			case "Hammersmith & City":
+        return <Image source = {require('./hammersmith.png')} style = {styles.line}/>
+			case "Waterloo & City":
+        return <Image source = {require('./waterloo.png')} style = {styles.line}/>
+			case "Victoria" :
+        return <Image source = {require('./victoria.png')} style = {styles.line}/>
+
+		} 
   }
+  
+
+	
 
 }
 
@@ -149,9 +184,18 @@ const styles = StyleSheet.create({
   line: {
     alignItems: 'center',
     justifyContent: 'center',
-    left: 15
+    marginLeft: 5
   },
   lineText: {
-    alignSelf: 'center'
+		//backgroundColor: 'grey', 
+		marginTop: 2,
+		marginLeft: 15,
   },
+	image: {
+		//backgroundColor: 'black',
+		alignSelf: 'center',
+		justifyContent: 'center',
+	  marginLeft: 3.5,
+		flexDirection: 'row',
+	},
 });
