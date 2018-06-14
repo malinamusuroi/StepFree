@@ -33,7 +33,11 @@ export default class Access extends Component{
   }
 
   formatAccess(data) {
-    return "\tLift: " + data[0].lift + "\n" + this.formatLineInfo(data[0].lineInfo || []) 
+    if (data.length > 0) {
+      return "\tLift: " + data[0].lift + "\n" + this.formatLineInfo(data[0].lineInfo || []) 
+    } else {
+      return "\t Manual Ramp: Yes"
+    }
   }
 
   formatLineInfo(lineInfo) {

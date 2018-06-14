@@ -14,9 +14,10 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 function getDirections(origin, destination, departure_time, callback) {
+    console.log(origin, destination);
     googleMapsClient.directions({
-        origin: origin + ' London',
-        destination: destination + ' London',
+        origin: origin,
+        destination: destination,
         mode: 'transit',
         departure_time: departure_time,
         alternatives: true
@@ -26,8 +27,14 @@ function getDirections(origin, destination, departure_time, callback) {
             getAccessibility(function (allStations) {
                 callback(response.json.routes.map(function (route) {
                     const duration = route.legs[0].duration.text;
-                    const departureTime = route.legs[0].departure_time.text;
-                    const arrivalTime = route.legs[0].arrival_time.text;
+                    let departureTime = "";
+                    if (route.legs[0].departure_time) {
+                       departureTime = route.legs[0].departure_time.text;
+                    }
+                    let arrivalTime = "";
+                    if (route.legs[0].arrival_time) {
+                        arrivalTime = route.legs[0].arrival_time.text;
+                    }
                     const steps = getSteps(route.legs[0]);
                     const accessSteps = fillAccessibility(steps, allStations);
 
