@@ -22,11 +22,24 @@ export default class Routes extends Component{
     title: 'Routes'
   };
 
-	 render() {
+  sortRoutes(json) {
+    json.routes.sort()
+  
+  }
 
+	 render() {
+   
     const { navigate } =  this.props.navigation;
 	  const routes2 = this.props.navigation.state.params.routes2;
-    const json = this.props.navigation.state.params.json
+    var json = this.props.navigation.state.params.json
+    var sorted = this.props.navigation.state.params.json.routes.sort(function (r1, r2) {
+      return r1.accessibility.length - r2.accessibility.length;
+    });
+    sorted = sorted.sort(function (r1, r2) {
+      return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
+    });
+
+    json.routes = sorted
 
    return (
     <View style = {styles.container}>
