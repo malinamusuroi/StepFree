@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   infoButton: {
-    backgroundColor: 'rgba(52, 52, 52, 0.5)',
+    backgroundColor: 'rgba(52, 52, 52, 1)',
     borderColor: 'grey',
     width: 350,
-    height: 35,
+    height: 45,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
