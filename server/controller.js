@@ -8,7 +8,6 @@ module.exports = {
         console.log(rating);
         mongodb.connect(connectionUrl, function (err, client) {
             assert.equal(null, err);
-            //console.log("Connected successfully to the server");
             const db = client.db(dbName);
 
             putReview(db, station, rating, (stationName, review, result) => {
@@ -42,7 +41,6 @@ function updateReview (db, stationName, review, callback) {
     collection.updateOne({ name: stationName }
         , { $set: { review: review } }, function(err, result) {
             assert.equal(err, null);
-            //console.log("Updated the document with the field a equal to 2");
             callback(result);
         });
 }
@@ -51,8 +49,6 @@ function putReview(db, stationName, review, callback) {
     const collection = db.collection('stations');
     collection.find({name: stationName}).toArray(function(err, docs) {
         assert.equal(err, null);
-        //console.log("Found the following records");
-        //console.log(docs);
         callback(stationName, review, docs);
     });
 }
