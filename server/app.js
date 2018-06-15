@@ -2,12 +2,15 @@ const express = require('express');
 const app = express();
 const request = require('request');
 const inArray = require('in-array');
+const controller = require('./controller');
 
 app.get('/getDirections', function (req, res) {
     getDirections(req.query.origin, req.query.destination, req.query.departure_time, function (json) {
         res.json({routes: json});
     });
 });
+
+controller.bla();
 
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.WEBAPPS_GMAPS_KEY
@@ -79,7 +82,6 @@ function stationIsEqual(s1, s2) {
 
 function getAccess(stop, lineType, accessInfo) {
     const access = accessInfo.filter(x => stationIsEqual(x.stationName, stop));
-    console.log(access);
     return access.map(a => {
         return {
             lift: a.lift,
