@@ -9,10 +9,14 @@
   },
   "dependencies": {
     "@google/maps": "^0.4.6",
+    "assert": "^1.4.1",
     "body-parser": "^1.18.3",
+    "bson": "^3.0.0",
     "express": "^4.16.3",
     "in-array": "^0.1.2",
     "mongodb": "^3.0.10",
+    "mongodb-core": "^3.0.9",
+    "node-gyp": "^3.7.0",
     "request": "^2.87.0",
     "xml2js": "^0.4.19",
     "zip-array": "^1.0.1"
