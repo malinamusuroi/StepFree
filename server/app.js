@@ -10,7 +10,10 @@ app.get('/getDirections', function (req, res) {
     });
 });
 
-controller.bla();
+app.get('/rateStation', function (req, res) {
+    controller.rate(req.query.station, req.query.rating);
+});
+
 
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.WEBAPPS_GMAPS_KEY

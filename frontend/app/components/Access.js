@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Rating } from 'react-native-elements';
 import {
   StyleSheet,
   Text,
@@ -16,12 +17,34 @@ export default class Access extends Component{
    return(
  	    <View style = {styles.container}>
           <Image source = {require('./background2.jpeg')} style = {styles.image}/>
-          <View style = {styles.view}>
-             <Text> {this.getAccessibilityData(steps)} </Text>
-          </View>
+					 <View style={{backgroundColor: 'white', flexDirection: 'column', alignItems: 'center',
+					   justifyContent: 'center', borderBottomLeftRadius: 8, borderBottomRightRadius: 8,
+					 borderTopLeftRadius: 8, borderTopRightRadius: 8}}>
+									<View style = {styles.view}>
+										 <Text style = {{fontSize: 19}}> {this.getAccessibilityData(steps)} </Text>
+									</View>
+									<Rating
+										 showRating
+										 type="custom"
+										 fractions={1}
+					 					 ratingColor="#21abcd"
+					 					 ratingBackgroundColor='white'
+										 startingValue={3.6}
+										 imageSize={30}
+										 onFinishRating={this.ratingCompleted}
+										 style={{paddingVertical: 10, margin: 10}}
+									 />
+					 </View>
   	  </View>
   	);
   }
+
+  ratingCompleted(rating) {
+					const station1 = "Holborn"
+									//encodeURIComponent(rating);
+		//const rating1 = encodeURIComponent(rating);
+    fetch('http://localhost:3000/rateStation?station=' + station1 + '&rating=' + rating)
+	}
 
   getAccessibilityData(data) { 
     return data
