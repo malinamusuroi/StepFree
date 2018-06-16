@@ -18,8 +18,8 @@ import {
   }
 
   static navigationOptions = {
-		title: 'Accessibility Details'
-	};
+    title: 'Accessibility Details'
+  };
 	
   render() {
     const { navigate } =  this.props.navigation;
