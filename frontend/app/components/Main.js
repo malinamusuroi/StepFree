@@ -42,20 +42,20 @@ export default class Main extends Component {
       </TouchableOpacity>
 
       <TextInput style={styles.FROMtext}
-				clearButtonMode='always'
+        clearButtonMode='always'
         placeholder="Enter Start"
         value={this.state.useCurrentLocation ? "Using Current Location" : this.state.FROMtext}
         onChangeText = {(FROMtext)=>this.setState({FROMtext: FROMtext, useCurrentLocation: false})}/>
 
-		  <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
-         <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, height: 25, 
-												                                  marginLeft: 314, marginTop: -47}}/>
-      </TouchableOpacity>
+       <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
+         <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, 
+	                                      height: 25, marginLeft: 314, marginTop: -47}}/>
+       </TouchableOpacity>
 
      
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
-				clearButtonMode='always'
+        clearButtonMode='always'
         value={this.state.TOtext}
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
@@ -73,13 +73,6 @@ export default class Main extends Component {
       />
     </View>
   )}
-
-
- // <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 15, 
- //								                                           alignSelf: 'flex-end', marginRight: 25, marginLeft: 120}}>
- //    <Text> Clear </Text>
- //  </TouchableOpacity>
-
 
   getCurrentLoc() {
     navigator.geolocation.getCurrentPosition((m) => this.geo_success(m))
@@ -237,8 +230,8 @@ const styles = StyleSheet.create({
   timePickButton: {
   //  backgroundColor: '#21abcd',
     backgroundColor: 'rgba(52, 52, 52, 0.6)',
-    height: 35,
-		width: 350,
+    height: 35,	
+    width: 350,
     borderRadius: 30,
     marginTop: 190,
     alignItems: 'center',

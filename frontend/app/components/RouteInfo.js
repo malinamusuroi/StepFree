@@ -14,7 +14,7 @@ export default class RouteInfo extends Component{
     super(props);
     this.state = {
       route:'',
-			currentLocation: 'Your Location'
+      currentLocation: 'Your Location'
     };
   }
 
@@ -85,7 +85,7 @@ export default class RouteInfo extends Component{
     const lines = item.split('\n');
     const inst = lines[0].split(' ');
     if (inst[0] == "TRANSIT") {
-			return lines[type].split(':')[1]
+      return lines[type].split(':')[1]
     } else {
       return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
              "  Walk " + inst[2] + " min \n"  + " 🔹 \n" +
