@@ -13,7 +13,8 @@ export default class RouteInfo extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      route:''
+      route:'',
+			currentLocation: 'Your Location'
     };
   }
 
@@ -28,7 +29,7 @@ export default class RouteInfo extends Component{
 
     return(
       <View style = {styles.container}>
-        <Image source = {require('./background2.jpeg')}
+        <Image source = {require('./plainbackground.jpg')}
         style = {styles.background}>
         </Image>
         <FlatList
@@ -55,7 +56,7 @@ export default class RouteInfo extends Component{
                 <Text style = {styles.text}>🔘 {this.getTransitDetails(item, 3)} </Text>
               </View>
     } else {
-      return  <Text style = {styles.text}> {this.getTransitDetails(item, 2)} </Text>
+      return  <Text style = {styles.text}> {this.getTransitDetails(item, 3)} </Text>
     }
   }  
 
@@ -69,7 +70,7 @@ export default class RouteInfo extends Component{
                 <View style={styles.image}>
                   {this.getLine(line)} 
                   <Text style={styles.lineText}>
-                      Central Line 
+                      {line} Line  
                       {instruction} 
                       {numStops}
                   </Text>
@@ -84,11 +85,11 @@ export default class RouteInfo extends Component{
     const lines = item.split('\n');
     const inst = lines[0].split(' ');
     if (inst[0] == "TRANSIT") {
-      return lines[type].split(':')[1]
+			return lines[type].split(':')[1]
     } else {
-      return "🔘 Your Location \n 🔹" + "\n 🔹" +
+      return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
              "  Walk " + inst[2] + " min \n"  + " 🔹 \n" +
-             " 🔘 " + lines[1].substring(7, lines[1].length)
+             " 🔘 " + lines[1].substring(10, lines[1].length)
     }
   }
 
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   infoButton: {
-    backgroundColor: 'rgba(52, 52, 52, 1)',
+    backgroundColor: 'rgba(52, 52, 52, 0.6)',
     borderColor: 'grey',
     width: 350,
     height: 45,

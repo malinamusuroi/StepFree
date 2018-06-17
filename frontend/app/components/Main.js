@@ -31,49 +31,39 @@ export default class Main extends Component {
  render() {
 
   const {navigate} = this.props.navigation;
-
   return(
     <View style={styles.container}>
-      <Image source = {require('./background.jpeg')}
+      <Image source = {require('./backgroundLogo.jpeg')}
             style = {styles.loginForm}>
       </Image>
 
-     <View style={styles.header}>
-        <Text style={styles.headerText}>EMPOWER</Text>
-      </View>
-
-      <View style = {styles.header}>
-        <Text style={styles.headerText2}>MOVEMENT</Text>
-      </View>
-
-    <View style = {{flexDirection: 'row'}}>
       <TouchableOpacity onPress={this.displayTimePicker}  style = {styles.timePickButton}>
         <Text style= {styles.timePickButtonText}>Depart {this.state.departureText}  ▼  </Text>
-    </TouchableOpacity>
-
-      <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 15, alignSelf: 'flex-end', marginRight: 25, marginLeft: 120}}>
-         <Text> Clear </Text>
       </TouchableOpacity>
-     </View>
 
       <TextInput style={styles.FROMtext}
+				clearButtonMode='always'
         placeholder="Enter Start"
         value={this.state.useCurrentLocation ? "Using Current Location" : this.state.FROMtext}
         onChangeText = {(FROMtext)=>this.setState({FROMtext: FROMtext, useCurrentLocation: false})}/>
 
-     <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
-      <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, height: 25, marginLeft: 325, marginTop: -47}}/>
-    </TouchableOpacity>
+		  <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
+         <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, height: 25, 
+												                                  marginLeft: 314, marginTop: -47}}/>
+      </TouchableOpacity>
 
+     
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
+				clearButtonMode='always'
         value={this.state.TOtext}
         onChangeText = {(TOtext)=>this.setState({TOtext})}/>
 
       <TouchableOpacity onPress= {() => this.search(navigate)} style = {styles.findButton}>
-        <Text style = {styles.findButtonText}> FIND ROUTE ♿︎</Text>
+        <Text style = {styles.findButtonText}> FIND ROUTE ♿︎ </Text>
       </TouchableOpacity>
           
+
       <DateTimePicker
         isVisible={this.state.isTimePickerVisible}
         onConfirm={this.onTimePickPress}
@@ -83,6 +73,13 @@ export default class Main extends Component {
       />
     </View>
   )}
+
+
+ // <TouchableOpacity onPress = {() => this.clear()} style = {{width: 40, backgroundColor: 'transparent', height: 15, 
+ //								                                           alignSelf: 'flex-end', marginRight: 25, marginLeft: 120}}>
+ //    <Text> Clear </Text>
+ //  </TouchableOpacity>
+
 
   getCurrentLoc() {
     navigator.geolocation.getCurrentPosition((m) => this.geo_success(m))
@@ -185,7 +182,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     marginBottom: 8,
     fontSize: 16,
-    borderColor: 'black',
+    borderColor: 'rgba(52, 52, 52, 0.7)',
     color: 'black',
     height: 50,
  },
@@ -204,7 +201,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 40,
     fontSize: 16,
-    borderColor: 'black',
+    borderColor: 'rgba(52, 52, 52, 0.6)',
     color: 'black',
     height: 50, 
   },
@@ -238,18 +235,18 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   timePickButton: {
-    backgroundColor: 'rgba(52, 52, 52, 0.3)',
-    width: 190,
+  //  backgroundColor: '#21abcd',
+    backgroundColor: 'rgba(52, 52, 52, 0.6)',
     height: 35,
+		width: 350,
     borderRadius: 30,
-    marginTop: 23,
+    marginTop: 190,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
     start: 10
   },
   timePickButtonText: {
-    fontSize: 15,
-    paddingLeft: 10
+    fontSize: 17,
+    paddingLeft: 10,
   },
 });
