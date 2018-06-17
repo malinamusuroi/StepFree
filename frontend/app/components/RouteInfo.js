@@ -13,7 +13,8 @@ export default class RouteInfo extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      route:''
+      route:'',
+      currentLocation: 'Your Location'
     };
   }
 
@@ -55,7 +56,7 @@ export default class RouteInfo extends Component{
                 <Text style = {styles.text}>🔘 {this.getTransitDetails(item, 3)} </Text>
               </View>
     } else {
-      return  <Text style = {styles.text}> {this.getTransitDetails(item, 2)} </Text>
+      return  <Text style = {styles.text}> {this.getTransitDetails(item, 3)} </Text>
     }
   }  
 
@@ -86,9 +87,9 @@ export default class RouteInfo extends Component{
     if (inst[0] == "TRANSIT") {
       return lines[type].split(':')[1]
     } else {
-      return "🔘 Your Location \n 🔹" + "\n 🔹" +
+      return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
              "  Walk " + inst[2] + " min \n"  + " 🔹 \n" +
-             " 🔘 " + lines[1].substring(7, lines[1].length)
+             " 🔘 " + lines[1].substring(10, lines[1].length)
     }
   }
 
