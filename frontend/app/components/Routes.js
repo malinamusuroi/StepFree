@@ -21,22 +21,16 @@ export default class Routes extends Component{
   static navigationOptions = {
     title: 'Routes'
   };
-	 
-	render() { 
+
+	 render() {
+
     const { navigate } =  this.props.navigation;
 	  const routes2 = this.props.navigation.state.params.routes2;
-    var json = this.props.navigation.state.params.json
-    var sorted = this.props.navigation.state.params.json.routes.sort(function (r1, r2) {
-      return r1.accessibility.length - r2.accessibility.length;
-    })//.sort(function (r1, r2) {
-     // return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
-    //});
-
-    json.routes = sorted
+    const json = this.props.navigation.state.params.json
 
    return (
     <View style = {styles.container}>
-      <Image source = {require('./background2.jpeg')}
+      <Image source = {require('./plainbackground.jpg')}
          style = {styles.background}>
       </Image>
 
@@ -64,20 +58,20 @@ export default class Routes extends Component{
  }
  
  getInfo(steps) {
-   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1));
+   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1, index));
  }
 
- getRoute(json, isLast) {
+ getRoute(json, isLast, key) {
    if (json.travelMode === 'WALKING') {
      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
-     return  <View style = {{flexDirection:'row'}}> 
+     return  <View key={key} style = {{flexDirection:'row'}}> 
               <Image source = {require('./wheel.png')} style = {styles.wheel}/>
               {arrow}
            </View>
    } else if (json.travelMode === 'TRANSIT') {
       const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/> 
         if (json.lineDetails.vehicle === 'SUBWAY') {
-          return <View style = {{flexDirection:'row'}}>
+          return <View key={key} style = {{flexDirection:'row'}}>
                    <Image source ={require('./icon.jpg')} style = {styles.subway}/>
                    <View style = {{width: this.getLength(json.lineDetails.lineType), marginTop: 6, height: 20, alignItems: 'center', backgroundColor: this.getColor(json.lineDetails.lineType)}}>
                       <Text style = {{color: this.getStationColor(json.lineDetails.lineType)}}> {json.lineDetails.lineType} </Text>
@@ -86,7 +80,7 @@ export default class Routes extends Component{
                  </View>
       } else {
          const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
-          return <View style = {{flexDirection: 'row'}}>
+          return <View key={key} style = {{flexDirection: 'row'}}>
                    <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
                    <Text> </Text>
                    <View style = {{backgroundColor: '#E32017', width: 33, height: 19, alignItems: 'center', marginTop: 8}}>

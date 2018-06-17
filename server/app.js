@@ -20,7 +20,6 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 function getDirections(origin, destination, departure_time, callback) {
-    console.log(origin, destination);
     googleMapsClient.directions({
         origin: origin,
         destination: destination,
@@ -42,7 +41,8 @@ function getDirections(origin, destination, departure_time, callback) {
                         arrivalTime = route.legs[0].arrival_time.text;
                     }
                     const steps = getSteps(route.legs[0]);
-                    const accessSteps = fillAccessibility(steps, allStations);
+                    const accessSteps = fillAccessibility(steps, allStations.filter((station) => inArray(usedStations(route.legs),
+                        station.stationName)));
 
                     return {
                         duration: duration,
@@ -50,7 +50,7 @@ function getDirections(origin, destination, departure_time, callback) {
                         arrivalTime: arrivalTime,
                         steps: accessSteps,
                         accessibility: '' + isStepFree(allStations.filter((station) => inArray(usedStations(route.legs),
-                            station.stationName)))
+                            station.stationName))),
                     };
                 })//.filter((r) => r.accessibility)
                 );
@@ -76,11 +76,9 @@ function fillAccessibility(steps, accessInfo) {
 }
 
 function stationIsEqual(s1, s2) {
-    s1.replace(" London Underground Station", "");
-    s1.replace(" Station", "");
-    s2.replace(" London Underground Station", "");
-    s2.replace(" Station", "");
-    return s1 == s2;
+    s2 = s2.replace(" London Underground Station", "");
+    s2 = s2.replace(" Station", "");
+    return s1 === s2;
 }
 
 function getAccess(stop, lineType, accessInfo) {

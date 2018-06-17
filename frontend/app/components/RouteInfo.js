@@ -28,7 +28,7 @@ export default class RouteInfo extends Component{
 
     return(
       <View style = {styles.container}>
-        <Image source = {require('./background2.jpeg')}
+        <Image source = {require('./plainbackground.jpg')}
         style = {styles.background}>
         </Image>
         <FlatList
@@ -69,7 +69,7 @@ export default class RouteInfo extends Component{
                 <View style={styles.image}>
                   {this.getLine(line)} 
                   <Text style={styles.lineText}>
-                      Central Line 
+                      {line} Line  
                       {instruction} 
                       {numStops}
                   </Text>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   infoButton: {
-    backgroundColor: 'rgba(52, 52, 52, 1)',
+    backgroundColor: 'rgba(52, 52, 52, 0.6)',
     borderColor: 'grey',
     width: 350,
     height: 45,
