@@ -6,6 +6,7 @@ import {
   Text,
   View,
   InlineImage,
+  SectionList,
 	FlatList,
 	TouchableOpacity
 } from 'react-native';
@@ -26,28 +27,36 @@ export default class Routes extends Component{
 
     const { navigate } =  this.props.navigation;
 	  const routes2 = this.props.navigation.state.params.routes2;
-    const json = this.props.navigation.state.params.json
+    const busRoutes = this.props.navigation.state.params.busResult;
+		const json = this.props.navigation.state.params.json
 
    return (
     <View style = {styles.container}>
       <Image source = {require('./plainbackground.jpg')}
          style = {styles.background}>
       </Image>
-
-      <FlatList 
-        data={json.routes} 
-        keyExtractor={(r, i) => i + ''}
-				renderItem={({item, index}) =>  
-			  <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index]})} underlayColor="white" style={styles.touchable}>
+		<SectionList
+      renderItem={({item, index, section}) => 
+			 <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index], bus: busRoutes})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
           <Text style = {{color:'black', fontSize: 18, marginBottom: 7, marginTop: 4}}> {item.departureTime} - {item.arrivalTime}                            {item.duration} </Text>
           <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap', marginBottom: 7, marginLeft: 8}}>{this.getSteps(item)}</View>
           <Text style = {styles.text}> {this.printStepFree(item.accessibility)} </Text>
         </View> 
         </TouchableOpacity>
-        }
-      />
-    </View>
+			}
+      renderSectionHeader={({section: {title}}) => (
+			<View style={styles.sectionBox}>				
+        <Text style={styles.sectionTitle}>{title}</Text>
+			</View>
+      )}
+      sections={[
+        {title: '  Step Free', data: json.bus},
+        {title: '  Not Step Free', data: json.routes},
+      ]}
+      keyExtractor={(item, index) => item + index}
+    />
+   </View>
     );   
  }
 
@@ -240,12 +249,26 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    borderColor: 'black',
+    borderColor: 'grey',
     marginBottom: 10,
 	  width: 360,
     backgroundColor: 'white'
   },
   touchable: {
    marginLeft: 2	
+	},
+  sectionTitle: {  
+   fontWeight: 'bold', 
+   fontSize: 18, 
+	},
+	sectionBox: {
+	 marginTop: 0,
+   backgroundColor: '#e4edf0',
+	 borderBottomLeftRadius: 8,
+	 borderWidth: 0.5,
+	 borderColor: 'grey',
+   borderBottomRightRadius: 8,
+   borderTopLeftRadius: 8,
+   borderTopRightRadius: 8,
 	}
 });
