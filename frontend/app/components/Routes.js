@@ -58,20 +58,20 @@ export default class Routes extends Component{
  }
  
  getInfo(steps) {
-   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1));
+   return steps.map((step, index) => this.getRoute(step, index == steps.length - 1, index));
  }
 
- getRoute(json, isLast) {
+ getRoute(json, isLast, key) {
    if (json.travelMode === 'WALKING') {
      const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
-     return  <View style = {{flexDirection:'row'}}> 
+     return  <View key={key} style = {{flexDirection:'row'}}> 
               <Image source = {require('./wheel.png')} style = {styles.wheel}/>
               {arrow}
            </View>
    } else if (json.travelMode === 'TRANSIT') {
       const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/> 
         if (json.lineDetails.vehicle === 'SUBWAY') {
-          return <View style = {{flexDirection:'row'}}>
+          return <View key={key} style = {{flexDirection:'row'}}>
                    <Image source ={require('./icon.jpg')} style = {styles.subway}/>
                    <View style = {{width: this.getLength(json.lineDetails.lineType), marginTop: 6, height: 20, alignItems: 'center', backgroundColor: this.getColor(json.lineDetails.lineType)}}>
                       <Text style = {{color: this.getStationColor(json.lineDetails.lineType)}}> {json.lineDetails.lineType} </Text>
@@ -80,7 +80,7 @@ export default class Routes extends Component{
                  </View>
       } else {
          const arrow = isLast ? null : <Image source = {require('./arrow.jpg')} style = {styles.arrow}/>
-          return <View style = {{flexDirection: 'row'}}>
+          return <View key={key} style = {{flexDirection: 'row'}}>
                    <Image source = {require('./busIcon.jpeg')} style = {styles.bus}/>
                    <Text> </Text>
                    <View style = {{backgroundColor: '#E32017', width: 33, height: 19, alignItems: 'center', marginTop: 8}}>
