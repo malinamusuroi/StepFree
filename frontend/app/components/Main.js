@@ -114,6 +114,8 @@ export default class Main extends Component {
       return steps
     })
 
+    busArray = busArray.concat(array);
+
     this.setState({
       busResult: busArray,
       result2: array,

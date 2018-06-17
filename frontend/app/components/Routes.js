@@ -16,7 +16,8 @@ export default class Routes extends Component{
     super(props);
     this.state ={
       routes: '',
-      routes2: ''
+      routes2: '',
+      bus: ''
     };
   }
   static navigationOptions = {
@@ -27,7 +28,7 @@ export default class Routes extends Component{
 
     const { navigate } =  this.props.navigation;
 	  const routes2 = this.props.navigation.state.params.routes2;
-    const busRoutes = this.props.navigation.state.params.busResult;
+    const busRoutes = this.props.navigation.state.params.buses;
 		const json = this.props.navigation.state.params.json
 
    return (
@@ -37,7 +38,7 @@ export default class Routes extends Component{
       </Image>
 		<SectionList
       renderItem={({item, index, section}) => 
-			 <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index], bus: busRoutes})} underlayColor="white" style={styles.touchable}>
+			 <TouchableOpacity onPress={()=> navigate('RouteInfo', {routes2: routes2[index], routes: json.routes[index + busRoutes.length], bus: busRoutes[index]})} underlayColor="white" style={styles.touchable}>
 			  <View style={styles.button}>
           <Text style = {{color:'black', fontSize: 18, marginBottom: 7, marginTop: 4}}> {item.departureTime} - {item.arrivalTime}                            {item.duration} </Text>
           <View style = {{flexDirection: 'row', width: 360, flexWrap: 'wrap', marginBottom: 7, marginLeft: 8}}>{this.getSteps(item)}</View>

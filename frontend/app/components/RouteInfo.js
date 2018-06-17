@@ -24,6 +24,7 @@ export default class RouteInfo extends Component{
 
   render() {
     const { navigate } =  this.props.navigation;
+    const bus = this.props.navigation.state.params.bus; 
     const routes = this.props.navigation.state.params.routes2;
     const rout = this.props.navigation.state.params.routes
 
@@ -33,7 +34,7 @@ export default class RouteInfo extends Component{
         style = {styles.background}>
         </Image>
         <FlatList
-          data={routes}
+          data={bus}
           scrollEnabled={true}
           keyExtractor={(r, i) => i + ''}
           renderItem={({item, index}) =>
