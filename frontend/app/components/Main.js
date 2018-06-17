@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 40,
     fontSize: 16,
-    borderColor: 'rgba(52, 52, 52, 0.6)',
+    borderColor: 'rgba(52, 52, 52, 0.5)',
     color: 'black',
     height: 50, 
   },
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   },
   timePickButton: {
   //  backgroundColor: '#21abcd',
-    backgroundColor: 'rgba(52, 52, 52, 0.6)',
+    backgroundColor: 'rgba(52, 52, 52, 0.4)',
     height: 35,	
     width: 350,
     borderRadius: 30,
