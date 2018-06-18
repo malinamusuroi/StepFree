@@ -97,7 +97,7 @@ export default class RouteInfo extends Component{
       return lines[type].split(':')[1]
     } else {
       return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
-             "  Walk " + inst[2] + " min \n"  + " 🔹 \n" +
+             "  Move for " + inst[2] + " min \n"  + " 🔹 \n" +
              " 🔘 " + lines[1].substring(10, lines[1].length)
     }
   }
