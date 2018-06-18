@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
 	},
 	sectionBox: {
 	 marginTop: 0,
-   backgroundColor: '#c4c1c3',
+   backgroundColor: '#f7f4f1',
 	 borderBottomLeftRadius: 8,
 	 borderWidth: 0.5,
 	 borderColor: 'grey',
