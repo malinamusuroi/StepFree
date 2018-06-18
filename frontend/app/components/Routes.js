@@ -31,8 +31,14 @@ export default class Routes extends Component{
 	  const routes2 = this.props.navigation.state.params.routes2;
     const busRoutes = this.props.navigation.state.params.buses;
 		const json = this.props.navigation.state.params.json
-
-   return (
+    json.routes = json.routes.sort(function (r1, r2) {
+		   return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
+		});
+		json.bus = json.bus.sort(function (r1, r2) {
+			 return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
+		});
+	  
+		return (
     <View style = {styles.container}>
       <Image source = {require('./plainbackground.jpg')}
          style = {styles.background}>
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
 	},
 	sectionBox: {
 	 marginTop: 0,
-   backgroundColor: '#e4edf0',
+   backgroundColor: '#c4c1c3',
 	 borderBottomLeftRadius: 8,
 	 borderWidth: 0.5,
 	 borderColor: 'grey',

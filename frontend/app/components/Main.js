@@ -103,11 +103,14 @@ export default class Main extends Component {
   fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
+		if (responseJson.routes.length != 0) {
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
       return steps
     })
+		}
+
     var busArray =  responseJson.bus.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x) );
