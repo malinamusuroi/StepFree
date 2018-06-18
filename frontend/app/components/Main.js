@@ -99,8 +99,8 @@ export default class Main extends Component {
   const origin1 = encodeURIComponent(this.state.FROMtext + londonText);
   const destination1 = encodeURIComponent(this.state.TOtext + ', London');
   const departureTime1 = encodeURIComponent(this.state.departureTime);
-  //fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
-  fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
+  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
+  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
 		if (responseJson.routes.length != 0) {
