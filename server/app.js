@@ -5,8 +5,13 @@ const inArray = require('in-array');
 const controller = require('./controller');
 
 app.get('/getDirections', function (req, res) {
-    getDirections(req.query.origin, req.query.destination, req.query.departure_time, function (json) {
-        res.json({routes: json});
+    getDirections(req.query.origin, req.query.destination, req.query.departure_time, 'subway', function (subway) {
+
+        getDirections(req.query.origin, req.query.destination, req.query.departure_time, 'bus', function (bus) {
+            var routesJson = subway.filter((route) => route.accessibility.trim() === "Not Step Free Route");
+            var busJson = filterStepFree(subway, bus);
+            res.json({routes: (routesJson), bus: (busJson)});
+        });
     });
 });
 
@@ -14,16 +19,16 @@ app.get('/rateStation', function (req, res) {
     controller.rate(req.query.station, req.query.rating);
 });
 
-
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.WEBAPPS_GMAPS_KEY
 });
 
-function getDirections(origin, destination, departure_time, callback) {
+function getDirections(origin, destination, departure_time, transitType, callback) {
     googleMapsClient.directions({
         origin: origin,
         destination: destination,
         mode: 'transit',
+        transit_mode: transitType,
         departure_time: departure_time,
         alternatives: true
         
@@ -45,20 +50,35 @@ function getDirections(origin, destination, departure_time, callback) {
                         station.stationName)));
 
                     return {
-                        duration: duration,
+                        duration: convertToMinutes(duration),
                         departureTime: departureTime,
                         arrivalTime: arrivalTime,
                         steps: accessSteps,
                         accessibility: '' + isStepFree(allStations.filter((station) => inArray(usedStations(route.legs),
                             station.stationName))),
+                        usedStations: usedStations(route.legs)
                     };
-                })//.filter((r) => r.accessibility)
+                })
                 );
             })
         } else {
             console.error(err);
         }
-    })
+    });
+}
+
+function convertToMinutes(duration) {
+    const arr = duration.split(' ');
+    if (arr[1].trim() === 'hour') {
+        return (parseInt(arr[0]) * 60 + parseInt(arr[2])) + " mins";
+    }
+    return duration
+}
+
+function filterStepFree(subway, bus) {
+    const stepFreeSubway = subway.filter((route) => route.accessibility === "Step Free Route");
+    stepFreeSubway.map((x) => bus.push(x));
+    return bus.filter((route) => route.accessibility === "Step Free Route");
 }
 
 function fillAccessibility(steps, accessInfo) {

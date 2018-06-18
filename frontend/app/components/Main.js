@@ -21,7 +21,8 @@ export default class Main extends Component {
       FROMtext: '',
       TOtext: '',
       json: '',
-      result2: ' ',
+      busResult:'',
+			result2: ' ',
       isTimePickerVisible: false,
       departureTime: '',
       departureText: 'Now' 
@@ -98,21 +99,30 @@ export default class Main extends Component {
   const origin1 = encodeURIComponent(this.state.FROMtext + londonText);
   const destination1 = encodeURIComponent(this.state.TOtext + ', London');
   const departureTime1 = encodeURIComponent(this.state.departureTime);
-  fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
-  //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
+  //fetch('https://safe-bastion-98845.herokuapp.com/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)    
+  fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
+		if (responseJson.routes.length != 0) {
     var array =  responseJson.routes.map(route => {
       var steps = route.steps
       steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
       return steps
     })
+		}
+
+    var busArray =  responseJson.bus.map(route => {
+      var steps = route.steps
+      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x) );
+      return steps
+    })
 
     this.setState({
+      busResult: busArray,
       result2: array,
       json: responseJson
     })
-    nav('Routes', {json: this.state.json, routes2: this.state.result2})
+    nav('Routes', {json: this.state.json, routes2: this.state.result2, buses: this.state.busResult})
   })
   .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)

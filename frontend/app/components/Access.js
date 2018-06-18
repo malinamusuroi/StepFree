@@ -51,6 +51,7 @@ import {
                  onAnimationComplete={rating => this.ratingCompleted(rating)}
                  selectedStar={images.starFilled}
                  placeholderRating={4}
+						     initial={3}
                  unselectedStar={images.starUnfilled}
                  config={{easing: Easing.inOut(Easing.ease), duration: 450 }}
                  stagger={80}

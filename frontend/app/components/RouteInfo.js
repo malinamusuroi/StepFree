@@ -24,6 +24,8 @@ export default class RouteInfo extends Component{
 
   render() {
     const { navigate } =  this.props.navigation;
+    const bus = this.props.navigation.state.params.bus; 
+		const section = this.props.navigation.state.params.section;
     const routes = this.props.navigation.state.params.routes2;
     const rout = this.props.navigation.state.params.routes
 
@@ -33,7 +35,7 @@ export default class RouteInfo extends Component{
         style = {styles.background}>
         </Image>
         <FlatList
-          data={routes}
+          data={this.getTransitMode(section)}
           scrollEnabled={true}
           keyExtractor={(r, i) => i + ''}
           renderItem={({item, index}) =>
@@ -46,7 +48,14 @@ export default class RouteInfo extends Component{
       </View>
     );
   }
-
+  
+	getTransitMode(section) {
+		if (section.title.trim() === "Step Free") {
+			return this.props.navigation.state.params.bus;
+		}
+	  return this.props.navigation.state.params.routes2;
+	
+	}
 
   displayByMode(item) {
     if (item.split('\n')[0].split(' ')[0] == "TRANSIT") {
