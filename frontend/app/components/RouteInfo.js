@@ -8,7 +8,7 @@ import {
   FlatList
 } from 'react-native';
 
-export default class oouteInfo extends Component{
+export default class RouteInfo extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +25,7 @@ export default class oouteInfo extends Component{
     const { navigate } =  this.props.navigation;
     const bus = this.props.navigation.state.params.bus; 
 		const section = this.props.navigation.state.params.section;
-    const routeInfo = this.props.navigation.state.params.routeInfo;
+    const routeInfo = this.props.navigation.state.params.routeDescriptions;
 
     return(
       <View style = {styles.container}>
@@ -91,7 +91,7 @@ export default class oouteInfo extends Component{
     if (inst[0] == "TRANSIT") {
       return lines[type].split(':')[1]
     } else {
-      return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
+      return "🔘  " + this.state.currentLocation + "\n 🔹" + "\n 🔹" +
              "  Move for " + inst[2] + " min \n"  + " 🔹 \n" +
              " 🔘 " + lines[1].substring(10, lines[1].length)
     }

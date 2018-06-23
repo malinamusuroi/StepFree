@@ -6,8 +6,7 @@ import {
   View,
   InlineImage,
   SectionList,
-	FlatList,
-	TouchableOpacity
+  TouchableOpacity
 } from 'react-native';
 
 export default class Routes extends Component{
@@ -15,7 +14,7 @@ export default class Routes extends Component{
     super(props);
     this.state ={
       routes: '',
-      routeDescriptions: '',
+      routes2: '',
       bus: '',
 			section: ''
     };
@@ -26,15 +25,15 @@ export default class Routes extends Component{
 
   render() {
     const { navigate } =  this.props.navigation;
-	  const routeDescriptions = this.props.navigation.state.params.routeDescriptions;
+    const routeDescriptions = this.props.navigation.state.params.routeDescriptions;
     const busRouteDescriptions = this.props.navigation.state.params.busRouteDescriptions;
-		const routeContext = this.props.navigation.state.params.routeContext
+    const routeContext = this.props.navigation.state.params.routeContext
     routeContext.routes = routeContext.routes.sort(function (r1, r2) {
-		   return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
-		});
-		routeContext.bus = routeContext.bus.sort(function (r1, r2) {
-			 return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
-		});
+      return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
+    });
+    routeContext.bus = routeContext.bus.sort(function (r1, r2) {
+      return parseInt(r1.duration.split(' ')[0]) - parseInt(r2.duration.split(' ')[0]);
+    });
 	  
   return (
     <View style = {styles.container}>
@@ -43,9 +42,9 @@ export default class Routes extends Component{
         </Image>
       <SectionList
         renderItem={({item, index, section}) => 
-         <TouchableOpacity onPress={()=> {this.setState({section: section})
-            navigate('RouteInfo', {routeDescriptions: routeDescriptions[index], routeInfo: routeContext.routes[index], bus: busRouteDescriptions[index], section: section})}}            underlayColor="white" style={styles.touchable}>
-         <View style={styles.button}>
+           <TouchableOpacity onPress={()=> {this.setState({section: section})
+            navigate('RouteInfo', {routeDescriptions: routeDescriptions[index], routeInfo: routeContext.routes[index], bus: busRouteDescriptions[index], section: section})}} underlayColor="white" style={styles.touchable}>
+           <View style={styles.button}>
             <Text style = {styles.duration}> {item.departureTime} - {item.arrivalTime}                            {item.duration} </Text>
             <View style = {styles.steps}>{this.getSteps(item)}</View>
             <Text style = {styles.stepfreetext}> {this.printStepFree(item.accessibility)} </Text>
@@ -108,17 +107,17 @@ export default class Routes extends Component{
   }
 
   getColor(station) {
-     switch(station) {
-       case 'Piccadilly':
-          return '#003688'
-          break;
-       case 'Circle':
-          return '#FFD300'
-          break;
+    switch(station) {
+      case 'Piccadilly':
+        return '#003688'
+        break;
+      case 'Circle':
+        return '#FFD300'
+        break;
       case 'Central':
-          return '#E32017'
-          break;
-     case 'Bakerloo':
+        return '#E32017'
+        break;
+      case 'Bakerloo':
          return '#B36305'
          break;
       case 'District':
@@ -181,17 +180,17 @@ export default class Routes extends Component{
   }
 
   printStepFree(info) {
-    if (info.charAt(0) === 'N') {
-      return '❌' + info;
+   if (info.charAt(0) === 'N') {
+     return '❌' + info;
     }
-      return '✅'  + info;
+     return '✅'  + info;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-	  paddingTop: 30,
-	  flex: 1,
+    paddingTop: 30,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -279,13 +278,13 @@ const styles = StyleSheet.create({
   sectionTitle: {  
     fontWeight: 'bold', 
     fontSize: 18, 
-	},
+  },
 	sectionBox: {
-	  marginTop: 0,
+    marginTop: 0,
     backgroundColor: '#f7f4f1',
-	  borderBottomLeftRadius: 8,
-	  borderWidth: 0.5,
-	  borderColor: 'grey',
+    borderBottomLeftRadius: 8,
+    borderWidth: 0.5,
+    borderColor: 'grey',
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
