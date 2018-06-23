@@ -8,8 +8,8 @@ app.get('/getDirections', function (req, res) {
     getDirections(req.query.origin, req.query.destination, req.query.departure_time, 'subway', function (subway) {
 
         getDirections(req.query.origin, req.query.destination, req.query.departure_time, 'bus', function (bus) {
-            var routesJson = subway.filter((route) => route.accessibility.trim() === "Not Step Free Route");
-            var busJson = filterStepFree(subway, bus);
+            const routesJson = subway.filter((route) => route.accessibility.trim() === "Not Step Free Route");
+            const busJson = filterStepFree(subway, bus);
             res.json({routes: (routesJson), bus: (busJson)});
         });
     });
@@ -31,7 +31,6 @@ function getDirections(origin, destination, departure_time, transitType, callbac
         transit_mode: transitType,
         departure_time: departure_time,
         alternatives: true
-        
     }, function (err, response) {
         if (!err) {
             getAccessibility(function (allStations) {
@@ -113,7 +112,7 @@ function getAccess(stop, lineType, accessInfo) {
 
 function isStepFree(access) {
     if (access.length === 0) {return "Step Free Route"}
-    var info = access.map((station) => station.lift === 'Yes').reduce((x, y) => x && y);
+    const info = access.map((station) => station.lift === 'Yes').reduce((x, y) => x && y);
     return info ? "Step Free Route" : "Not Step Free Route"
 }
 

@@ -25,7 +25,7 @@ export default class RouteInfo extends Component{
     const { navigate } =  this.props.navigation;
     const bus = this.props.navigation.state.params.bus; 
 		const section = this.props.navigation.state.params.section;
-    const routeInfo = this.props.navigation.state.params.routeDescriptions;
+    const routeInfo = this.props.navigation.state.params.routeInfo;
 
     return(
       <View style = {styles.container}>
