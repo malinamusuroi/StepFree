@@ -4,10 +4,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  ScrollView,
   TextInput,
   TouchableOpacity,
-  Button,
   Navigator,
   Geolocation,
   View
@@ -30,12 +28,12 @@ export default class Main extends Component {
   }
 
  render() {
+   const {navigate} = this.props.navigation;
 
-  const {navigate} = this.props.navigation;
-  return(
+ return(
     <View style={styles.container}>
       <Image source = {require('./backgroundLogo.jpeg')}
-            style = {styles.loginForm}>
+            style = {styles.backgroundImage}>
       </Image>
 
       <TouchableOpacity onPress={this.displayTimePicker}  style = {styles.timePickButton}>
@@ -49,11 +47,9 @@ export default class Main extends Component {
         onChangeText = {(FROMtext)=>this.setState({FROMtext: FROMtext, useCurrentLocation: false})}/>
 
        <TouchableOpacity onPress = {() => this.getCurrentLoc()}> 
-         <Image source = {require('./loc.png')} style = {{position: 'absolute', width: 25, 
-	                                      height: 25, marginLeft: 314, marginTop: -47}}/>
+         <Image source = {require('./loc.png')} style = {styles.currentLocIcon}/>
        </TouchableOpacity>
 
-     
       <TextInput style={styles.TOtext}
         placeholder="Enter Destination"
         clearButtonMode='always'
@@ -64,7 +60,6 @@ export default class Main extends Component {
         <Text style = {styles.findButtonText}> FIND ROUTE ♿︎ </Text>
       </TouchableOpacity>
           
-
       <DateTimePicker
         isVisible={this.state.isTimePickerVisible}
         onConfirm={this.onTimePickPress}
@@ -73,26 +68,26 @@ export default class Main extends Component {
         titleIOS= 'Pick a departure time'
       />
     </View>
-  )}
+ )}
 
-  getCurrentLoc() {
+ getCurrentLoc() {
     navigator.geolocation.getCurrentPosition((m) => this.geo_success(m))
-  }
+ }
 
-   geo_success(m) {
-     this.setState( {
-       FROMtext: m.coords.latitude + ',' + m.coords.longitude,
-       useCurrentLocation: true
-    })
-  }
+ geo_success(m) {
+   this.setState( {
+     FROMtext: m.coords.latitude + ',' + m.coords.longitude,
+     useCurrentLocation: true
+   })
+ }
 
-  clear() {
-    this.setState({
-      useCurrentLocation: false,
-      FROMtext: '',
-      TOtext: '',
+ clear() {
+   this.setState({
+     useCurrentLocation: false,
+     FROMtext: '',
+     TOtext: '',
     });
-  }
+ }
 
  search(nav) {
   const londonText = this.state.useCurrentLocation ? '' : ', London';
@@ -103,26 +98,15 @@ export default class Main extends Component {
   //fetch('http://localhost:3000/getDirections?origin=' + origin1 +'&destination=' + destination1 + '&departure_time=' + departureTime1)
   .then((response) => response.json())
   .then((responseJson) => {
-		if (responseJson.routes.length != 0) {
-    var array =  responseJson.routes.map(route => {
-      var steps = route.steps
-      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x));
-      return steps
-    })
-		}
-
-    var busArray =  responseJson.bus.map(route => {
-      var steps = route.steps
-      steps = steps.map(x => x.travelMode + ' - ' + x. durationOfStep + '\n  ' + x.instruction + '  ' + this.getLineDetails(x) );
-      return steps
-    })
+    const routeDescriptions = this.formatRoutes(responseJson.routes)
+    const busRouteDescriptions = this.formatRoutes(responseJson.bus)
 
     this.setState({
-      busResult: busArray,
-      result2: array,
-      json: responseJson
+      busRouteDescriptions: busRouteDescriptions,
+      routeDescriptions: routeDescriptions,
+      routeContext: responseJson
     })
-    nav('Routes', {json: this.state.json, routes2: this.state.result2, buses: this.state.busResult})
+    nav('Routes', {routeContext: this.state.routeContext, routeDescriptions: this.state.routeDescriptions, busRouteDescriptions: this.state.busRouteDescriptions})
   })
   .catch(function(error) {
     console.error('There has been a problem with your fetch operation: ' + error.message)
@@ -136,6 +120,14 @@ export default class Main extends Component {
    this.setState({ departureText: 'at ' + date.toLocaleTimeString('en-US') });
    this.hideTimePicker();
  };
+
+ formatRoutes(routes) {
+   return routes.map(route => {
+    return route.steps.map(step => {
+      return step.travelMode + ' - ' + step.durationOfStep + '\n  ' + step.instruction + '  ' + this.getLineDetails(step);
+    })
+   })
+ }
 
  getLineDetails(json) {
    if (json.lineDetails == null) {
@@ -153,25 +145,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  loginForm: {
+  backgroundImage: {
     flex: 1,
     width: 415,
     height: 700,
     position: 'absolute', 
     resizeMode: 'cover'
-  },
-  headerText: {
-    paddingLeft: 90,
-    paddingTop: 50,
-    fontSize: 40,
-    color:'black'
-  },
-  headerText2: {
-    paddingLeft: 130,
-    paddingTop: 5,
-    paddingBottom: 38,
-    fontSize: 40,
-    color: 'black',
   },
   FROMtext: {
     borderWidth: 1,
@@ -189,9 +168,12 @@ const styles = StyleSheet.create({
     color: 'black',
     height: 50,
  },
-  image: {
-    width: 20, 
-    height: 20
+  currentLocIcon: {
+    position: 'absolute',
+    width: 25, 
+	  height: 25,
+    marginLeft: 314,
+    marginTop: -47
   },
   TOtext: {
     borderWidth: 1,
@@ -208,21 +190,6 @@ const styles = StyleSheet.create({
     color: 'black',
     height: 50, 
   },
-  switchButtonText:{
-    color: '#fff',
-    fontSize: 28,
-  },
-  switchButton: {
-    backgroundColor: '#21abcd',
-    width: 40,
-    height: 40,
-    borderRadius: 15,
-    start: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-  },
   findButton: {
     backgroundColor: '#21abcd',
     width: 200,
@@ -238,7 +205,6 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   timePickButton: {
-  //  backgroundColor: '#21abcd',
     backgroundColor: 'rgba(52, 52, 52, 0.4)',
     height: 35,	
     width: 350,

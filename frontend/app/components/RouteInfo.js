@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   Image,
-  ScrollView,
   View,
   TouchableOpacity,
   FlatList
@@ -26,8 +25,7 @@ export default class RouteInfo extends Component{
     const { navigate } =  this.props.navigation;
     const bus = this.props.navigation.state.params.bus; 
 		const section = this.props.navigation.state.params.section;
-    const routes = this.props.navigation.state.params.routes2;
-    const rout = this.props.navigation.state.params.routes
+    const routeInfo = this.props.navigation.state.params.routeInfo;
 
     return(
       <View style = {styles.container}>
@@ -41,8 +39,7 @@ export default class RouteInfo extends Component{
           renderItem={({item, index}) =>
             <View style = {styles.stepView}>{this.displayByMode(item)}</View>}
         />
-
-        <TouchableOpacity onPress={() => navigate('Access', {route: rout})} style={styles.infoButton}>
+        <TouchableOpacity onPress={() => navigate('Access', {route: routeInfo})} style={styles.infoButton}>
           <Text style={styles.buttonText}> Get Accessibility Information ♿︎ </Text>
         </TouchableOpacity>
       </View>
@@ -53,8 +50,7 @@ export default class RouteInfo extends Component{
 		if (section.title.trim() === "Step Free") {
 			return this.props.navigation.state.params.bus;
 		}
-	  return this.props.navigation.state.params.routes2;
-	
+	    return this.props.navigation.state.params.routeDescriptions;
 	}
 
   displayByMode(item) {
@@ -88,7 +84,6 @@ export default class RouteInfo extends Component{
     }
       return '';
   }
-	
 		
   getTransitDetails(item, type) {
     const lines = item.split('\n');
@@ -96,7 +91,7 @@ export default class RouteInfo extends Component{
     if (inst[0] == "TRANSIT") {
       return lines[type].split(':')[1]
     } else {
-      return "🔘 " + this.state.currentLocation +  " \n 🔹" + "\n 🔹" +
+      return "🔘  " + this.state.currentLocation + "\n 🔹" + "\n 🔹" +
              "  Move for " + inst[2] + " min \n"  + " 🔹 \n" +
              " 🔘 " + lines[1].substring(10, lines[1].length)
     }

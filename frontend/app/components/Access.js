@@ -10,10 +10,9 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  FlatList
 } from 'react-native';
 
-  export default class Access extends Component{
+ export default class Access extends Component{
     constructor(props) {
       super(props);
       this.state = {
@@ -21,60 +20,55 @@ import {
       };
     }
 
-  static navigationOptions = {
-    title: 'Accessibility Details'
-  };
+   static navigationOptions = {
+     title: 'Accessibility Details'
+   };
 	
-  render() {
-    const { navigate } =  this.props.navigation;
-    const routes = this.props.navigation.state.params.route
-    const steps = routes.steps
-    const images = {
-      starFilled: require('./star_filled.png'),
-      starUnfilled: require('./star_unfilled.png')
-    }
+   render() {
+     const { navigate } =  this.props.navigation;
+     const routes = this.props.navigation.state.params.route
+     const steps = routes.steps
+     const images = {
+       starFilled: require('./star_filled.png'),
+       starUnfilled: require('./star_unfilled.png')
+     }
  
-    return(
-      <View style = {styles.container}>
+   return(
+    <View style = {styles.container}>
          <Image source = {require('./plainbackground.jpg')} style = {styles.image}/>                            
       <KeyboardAwareScrollView style= {styles.keyboardview}>
-         <ScrollView style={{backgroundColor: 'white', flexDirection: 'column', marginTop: 10,
-                       borderWidth: 1, borderColor: 'black',
-                       borderBottomLeftRadius: 8, borderBottomRightRadius: 8,
-                       borderTopLeftRadius: 8, borderTopRightRadius: 8}}>
-         <View style = {styles.view}>
-           <Text style = {{fontSize: 15, marginTop: 2, marginBottom: 3, paddingTop: 4}}> {this.getAccessibilityData(steps)} </Text>
+         <ScrollView style={styles.scrollView}>
+           <View style = {styles.view}>
+             <Text style = {styles.accessibilityText}> {this.getAccessibilityData(steps)} </Text>
+           </View>
+         </ScrollView>
+         <View style={{alignSelf: 'center'}}>
+            <Rating
+               onAnimationComplete={rating => this.ratingCompleted(rating)}
+               selectedStar={images.starFilled}
+					     initial={3}
+               unselectedStar={images.starUnfilled}
+               config={{easing: Easing.inOut(Easing.ease), duration: 450 }}
+               stagger={80}
+               maxScale={1.4}
+               starStyle={{marginLeft: 7, width: 40, height: 40}}
+               style = {{alignSelf: 'center'}}
+            />
          </View>
-       </ScrollView>
-              <View style={{alignSelf: 'center'}}>
-               <Rating
-                 onAnimationComplete={rating => this.ratingCompleted(rating)}
-                 selectedStar={images.starFilled}
-                 placeholderRating={4}
-						     initial={3}
-                 unselectedStar={images.starUnfilled}
-                 config={{easing: Easing.inOut(Easing.ease), duration: 450 }}
-                 stagger={80}
-                 maxScale={1.4}
-                 starStyle={{marginLeft: 7, width: 40, height: 40}}
-                 style = {{alignSelf: 'center'}}
-               />
-              </View>
+         <TextInput style={styles.reviewText}
+               multiline
+               blurOnSubmit
+               placeholder="Leave a review..."
+               placeholderTextColor='white' 
+               value={this.state.reviewText}
+               onChangeText = {(reviewText)=>this.setState({reviewText})}
+               onSubmitEnding = {() => Keyboard.dismiss()}/>
 
-              <TextInput style={styles.reviewText}
-                  multiline
-                  blurOnSubmit
-                  placeholder="Leave a review..."
-                  placeholderTextColor='white' 
-                  value={this.state.reviewText}
-                  onChangeText = {(reviewText)=>this.setState({reviewText})}
-                  onSubmitEnding = {() => Keyboard.dismiss()}/>
-
-               <TouchableOpacity style = {styles.button} onPress={() => this.sendTweet()}>
-                  <Text style = {{color: 'white', fontSize: 16}}> Send review to TfL </Text>
-               </TouchableOpacity>
+          <TouchableOpacity style = {styles.button} onPress={() => this.sendTweet()}>
+             <Text style = {{color: 'white', fontSize: 16}}> Send review to TfL </Text>
+          </TouchableOpacity>
       </KeyboardAwareScrollView>
-      </View>);
+    </View>);
   }
 
   sendTweet() {
@@ -135,6 +129,17 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     resizeMode: 'cover'
   },
+  scrollView: {
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8
+  },
   view: {
     marginTop: 10,
     padding: 20,
@@ -144,6 +149,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     backgroundColor: 'white'
+  },
+  accessibilityText: {
+    fontSize: 15, 
+    marginTop: 2,
+    marginBottom: 3,
+    paddingTop: 4
   },
   reviewText: {
     borderWidth: 1,
